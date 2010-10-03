@@ -256,7 +256,7 @@ footer a:hover {
   line-height: 1.4;
   margin-left: 16px;
   text-decoration: none;
-  text-shadow: 1px 1px 1px #666;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.2);
   padding: 0.5em 10px;
   width: 169px;
 }
