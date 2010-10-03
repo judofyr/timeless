@@ -39,6 +39,7 @@ end
 module Timeless::Controllers
   class Index
     def get
+      @headers['Cache-Control'] = 'public, max-age=3600'
       @change = Change.last
       render :index
     end
@@ -55,6 +56,7 @@ module Timeless::Controllers
 
   class Changelog < R '/changelog'
     def get
+      @headers['Cache-Control'] = 'public, max-age=3600'
       @changes = Change.all
       render :changes
     end
@@ -62,6 +64,7 @@ module Timeless::Controllers
 
   class ChangelogN
     def get(id)
+      @headers['Cache-Control'] = 'public, max-age=3600'
       @change = Change.new(id)
       case @change.type
       when :entry
@@ -84,6 +87,7 @@ module Timeless::Controllers
   
   class Entry < R '/(.+?)'
     def get(name)
+      @headers['Cache-Control'] = 'public, max-age=3600'
       @entry = Models::Entry.new(name)
 
       if @entry.file?
