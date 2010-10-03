@@ -1,0 +1,47 @@
+Title: Chained Comparisons
+Subtitle: Stealing a nifty Python feature
+
+Maybe someone should help me [refactor this code?][refmycode]
+
+    ## Implementing chained comparisons in Ruby
+
+    (1..10).each do |x|
+      case
+      when x < 3
+        puts "#{x} is quite low"
+      when 3 <= x < 6
+        puts "#{x} is quite all right"
+      when 6 <= x < 10
+        puts "#{x} is quite fine"
+      when 10 <= x
+        puts "#{x} is quite high"
+      end
+    end
+
+
+    lets
+      BEGIN {
+            
+    Object.send(*                                                           
+      "ZGVmaW5lX21ldGhvZA=bWV0aG9kX21pc3Npbmc=".unpack("mm"                      )
+                                                                              ){|*|}
+    [[],[61]].inject([]){|_,__|_<<[60,*__]<<[62,*__]}.map{|_|_.pack("c*"        )}.
+    each { |a| [Float, Fixnum, Comparable].each { |b| b.class_eval               {
+    c = instance_method(a) and define_method(a) { |d| c.bind(self).call(d) and d }
+                                                                          
+    there                                                                        }
+      is                                                                         }
+        no              ;FalseClass.class_eval "def %s(*) false end"%a           }
+          END                                                                   {}
+                                                                                
+    to                                                                          
+      this                                                                      
+        madness                                                                  }
+                                                                                
+    this
+      is
+        RUBY!
+          (not perl?)
+{: lang=ruby }
+
+[refmycode]: http://refactormycode.com/codes/1284-chained-comparisons-in-ruby

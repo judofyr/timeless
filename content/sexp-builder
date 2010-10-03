@@ -1,0 +1,148 @@
+Title: SexpBuilder
+Subtitle: Easily process and rewrite S-expressions using SexpPath
+
+*NOTE: In this post I use the term "S-expression" and "Sexp" quite a lot. If
+you're not quite sure what they mean, check out [Sexp for
+Rubyists](/sexp-for-rubyists).*
+
+I very often use Air Castle Driven Development. So when I see something like
+this:
+
+    def process_call(exp)
+      # exp[1] => reciever.
+      # exp[2] => method
+      # exp[3] => (args)
+      exp[3] = process(exp[3])
+      if text?(exp)
+        s(:parkaby, :text, exp[3])
+      elsif tag = force_tag_call?(exp) || tag_call?(exp)
+        s(:parkaby, :tag, *tag)
+      else
+        exp
+      end
+    end
+{: lang=ruby }
+
+I just write down what I want it to look like:
+
+    rule :tag_call do
+      # Forced tag call
+      s(:call,
+       s(:call, nil, :tag, s(:arglist)),
+       wild % :name,
+       args % :args) |
+
+      # or regular tag call
+      s(:call,
+      nil,
+      name % :name,
+      args % :args)
+    end
+
+    rule :text do
+      s(:call, nil,      :text, s(:arglist, wild % :content)) |
+      s(:call, s(:self), :<<,   s(:arglist, wild % :content))
+    end
+{: lang=ruby }
+
+Then I know I have a useful API and I can start implement it. Okay, the
+examples above aren't quite equal, so let's have a look at what I'm really
+trying to solve.
+
+## Matching complex Sexp in Parkaby
+
+[Parkaby](/parkaby) is my little experiment to create a super-duper-feaky-fast
+Markaby replacement by parsing the source and "compiling" it. Ultimately, a
+template like this:
+
+    h1 "Hello World!"
+    p "Welcome #{@user}"
+{: lang=ruby }
+
+Should be compiled into:
+
+    "<h1>Hello World!</h1><p>Welcome #{@user}</p>"
+{: lang=ruby }
+
+In Parkaby, this is accomplished in two steps: A *processor* which figues out
+what should be considered HTML-tags and what should be considered regular
+method calls, and a *generator* which compiles it back into Ruby.
+
+An interesting aspect of Parkaby is that the processor is actually quite
+complex. For instance, it has to figure out that
+`div.post.clearfix.main!(:style => "display:none")` should be compiled to `<div
+class="post clearfix" id="main" style="display:none"></div>`.
+
+My origianl approach was to use SexpProcessor:
+
+    def process_call(exp)
+      # exp[1] => reciever.
+      # exp[2] => method
+      # exp[3] => (args)
+      exp[3] = process(exp[3])
+      if text?(exp)
+        s(:parkaby, :text, exp[3])
+      elsif tag = force_tag_call?(exp) || tag_call?(exp)
+        s(:parkaby, :tag, *tag)
+      else
+        exp
+      end
+    end
+{: lang=ruby }
+
+Every time it finds a method call, it checks if it's a text-code or a HTML-tag
+(and then turns it into a parkaby-sexp), or it just leaves it alone. The code
+ended up quite messy, and it's before I even tried to implement CSS-proxies
+(`tag.klass.klass.klass.id!`): [Parkaby before SexpBuilder][before].
+
+## Adam Samderson to the rescue!
+
+Ka-poof! Adam Sanderson writes [SexpPath][sexp_path], a simple DSL for matching
+Sexp.
+
+Let's say we want to match `text "Hello"` and `self << "Hello"`:
+
+    # text "Hello"
+    sexp1 = s(:call, nil, :text, s(:arglist, s(:str, "Hello")))
+    # self << "Hello"
+    sexp2 = s(:call, s(:self), :<<, s(:arglist, s(:str, "Hello")))
+
+    # the old approach:
+    def like_text?(exp)
+      rec_meth = exp[1..2].to_a
+      rec_meth == [[:self], :<<] || rec_meth == [nil, :text]
+    end
+
+    def text?(exp)
+      like_text?(exp) and
+      exp[3].length == 2
+    end
+
+    # the SexpPath approach:
+    query = Q? do
+      s(:call, nil,      :text, s(:arglist, wild % :content)) |
+      s(:call, s(:self), :<<,   s(:arglist, wild % :content))
+    end
+{: lang=ruby }
+
+Woah, isn't that powerful? The vertical-bar means "or", `wild` matches
+everything, and the percent sign captures the value. Exactly what I want!
+
+## Introducin SexpBuilder
+
+    gem install sexp_builder
+
+Well, SexpPath alone wasn't enough to solve my problem - I had to introduce a
+new library. SexpBuilder is a more complete solution to easily match and
+replace complex Sexp. Very much like a parser, you define matchers and rules,
+and by combining them with a rewriter it was breeze to implement CSS-proxy.
+
+Have a look at [The Dojo][dojo] for documentation and
+[Parkaby::Processor][after] for a full example. There's also a
+[Andand.rb][andand] for a more traditional example/demo.
+
+[before]: http://github.com/judofyr/parkaby/blob/237873/lib/parkaby/processor.rb
+[after]: http://github.com/judofyr/parkaby/blob/master/lib/parkaby/processor.rb
+[sexp_path]: http://github.com/adamsanderson/sexp_path
+[andand]: http://github.com/judofyr/sexp_builder/blob/master/examples/andand.rb
+[dojo]: http://dojo.rubyforge.org/

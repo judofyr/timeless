@@ -1,0 +1,42 @@
+Title: Grancher
+Subtitle: Easily Copy Folders to a Git Branch
+
+[GitHub Pages][pages] is a pretty cool feature which allows you to publish web
+content to a github.com subdomain named after your username. It automatically
+serves everything you have located under the `gh-pages` branch, so you can use
+Git to update the site.
+
+However, what do you do when you already got your website/docs/whatever in your
+master branch? If you checkout the gh-pages branch, the folder disappears.
+You'll actually have to copy the folder to another place before you checkout
+the new branch and copies the folder into that branch.
+
+It's [even harder][gh-pages] if you haven't created the gh-pages branch yet.
+
+## Grancher
+
+Okey, enter Grancher (yeah, I know, lame name):
+
+    # Install:
+    system('sudo gem install grancher')
+
+    # Create a Rakefile:
+    require 'grancher/task'
+    
+    Grancher::Task.new do |g|
+      g.branch = 'gh-pages'
+      g.push_to = 'origin' # automatically push too
+      
+      g.directory 'website'
+    end
+{: lang=ruby }
+
+Do a `rake publish` and the folder will be copied to the gh-pages branch,
+committed and pushed. Easy peasy! Have a look at [the documentation][grancher]
+to get started. Report any bugs at [GitHub][grancher-bugs].
+
+[pages]: http://github.com/blog/272
+[gh-pages]: http://pages.github.com/
+[grancher]: http://judofyr.github.com/grancher
+[grancher-bugs]: http://github.com/judofyr/grancher/issues
+

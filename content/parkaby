@@ -1,0 +1,41 @@
+Title: Parkaby
+Subtitle: Super fast experimental Markaby replacement
+
+    Parkaby {
+      html {
+        head {
+          title "happy title"
+        }
+        body {
+          h1 "happy heading"
+          a "a link", "href" => "url"
+        }
+      }
+    }
+{: lang=ruby }
+
+The benchmark:
+
+    ~> ruby bench/run.rb simple 10000
+
+                               user     system      total        real
+    Erubis                 0.030000   0.000000   0.030000 (  0.022264)
+    Haml                   0.110000   0.000000   0.110000 (  0.117887)
+    Parkaby (def_method)   0.130000   0.000000   0.130000 (  0.135996)
+    Parkaby (render)       0.150000   0.010000   0.160000 (  0.150680)
+    Parkaby (inline)       0.970000   0.000000   0.970000 (  0.988010)
+    Tagz                   3.250000   0.040000   3.290000 (  3.400699)
+    Markaby               12.610000   0.140000  12.750000 ( 13.067794)
+
+    ~> ruby bench/run.rb nasty 500
+
+                               user     system      total        real
+    Erubis                 0.190000   0.010000   0.200000 (  0.198487)
+    Parkaby (def_method)   0.350000   0.000000   0.350000 (  0.363106)
+    Parkaby (render)       0.360000   0.010000   0.370000 (  0.365007)
+    Parkaby (inline)       0.570000   0.000000   0.570000 (  0.614286)
+    Haml                   2.490000   0.030000   2.520000 (  2.620025)
+    Tagz                   5.100000   0.060000   5.160000 (  5.394778)
+    Markaby                7.220000   0.090000   7.310000 (  7.630588)
+
+Check out the repo for all the details: <http://github.com/judofyr/parkaby>

@@ -1,0 +1,319 @@
+Title: Temple
+Subtitle: Framework for creating rock solid template engines
+
+I have a theory:
+
+> Every compilable template can be compiled to ERB.
+
+Well, not ERB-the-syntax, but ERB-the-concept:
+
+> Every compilable template consists of three elements:
+> 
+> * Static text
+> * Dynamic text (pieces of Ruby which are evaluated and sent to the client)
+> * Blocks (pieces of Ruby which are evaluated and _not_ sent to the
+>   client, but might change the control flow).
+
+Nothing revolutionary at all. Just a theory.
+
+(snip)
+
+## Compiling it
+
+There are several ways to render such a template, but the fastest one is to
+compile it to pure Ruby:
+
+    Hello <%= @world %>!
+    <% if @me.happy? %>
+      <%= @greeting %>
+    <% end %>
+{: lang=html_rails }
+
+Becomes:
+
+    _buf = []
+    _buf << "Hello "
+    _buf << (@world)
+    _buf << "!\n"
+    if @me.happy?
+    _buf << "\n  "
+    _buf << (@greeting)
+    _buf << "\n"
+    end
+    _buf.join
+{: lang=ruby }
+
+You probably also want to optimize it:
+
+    _buf = []
+    _buf << ("Hello #{@world}!\n")
+    if @me.happy?
+    _buf << ("\n  #{@greeting}\n")
+    end
+    _buf.join
+{: lang=ruby }
+
+Or maybe you rather want `_buf` to be a String? Or print it directly to
+stdout?
+
+These options are already written and implemented in Erubis, but none of
+the other template engines can take advantage of that. Which is a shame,
+because we know that every compilable template can be compiled to ERB. So
+*technically* it shouldn't be a problem to share such code.
+
+## Abstractions
+
+The problem with today's template engines is that they aren't using enough abstractions. The first version of Mustache parsed and compiled at the same time. Haml does parsing/compiling/optimization in some tightly coupled modules. Parkaby separates parsing and compiling, but could share a lot of code with Haml since they're both compiling HTML tags. While I haven't checked it out, I assume the same applies to [RuHL][ruhl]. Liquid doesn't really compile (to Ruby) at all, but rather uses a VM approach.
+
+Every template developers faces the same questions: Should I use an Array
+or String as buffer? How should I escape it? How can I optimize it? Or,
+they don't even compile it at all.
+
+## Enter the Temple
+
+[Temple][temple] attempts to solve these problems. Your goal as a template developer is to end up with an Array like this:
+
+    [:multi,
+     [:static, "Hello "],
+     [:dynamic, "@world"],
+     [:static, "!\n"],
+     [:block, "if @me.happy?"],
+     [:static, "\n  "],
+     [:dynamic, "@greeting"],
+     [:static, "\n"],
+     [:block, "end"]]
+{: lang=ruby }
+
+Then let Temple take over. You could use Temple::Filters::DynamicInliner to
+optimize sequential statics/dynamics into a single dynamic.
+Temple::Filters::Escapable handles escaping, and Temple::Core::ArrayBuffer
+generates the Ruby code.
+
+The idea is to build an engine based on a chain of compilers. A compiler is
+simply a class which has a method called _#compile_ which takes one
+arguments. It's illegal for a compiler to mutate the argument, and it
+should be possible to use the same instance several times.
+
+Very much like you have middlewares in Rack, you use compilers in Temple
+(except _everything_ is a compiler in Temple):
+
+    class ERBEngine < Temple::Engine
+      use Temple::Parsers::ERB
+      use Temple::Filters::DynamicInliner
+      use Temple::Core::ArrayBuffer
+    end  
+{: lang=ruby }
+
+## Step 1: The parser
+
+In Temple, a parser is also a compiler, because a compiler is just
+something that takes some input and produces some output. A parser is then
+something that takes a String and returns an Array.
+
+A dead simple ERB parser could look like this:
+
+    class ERB
+      def compile(src)
+        result = [:multi]
+        while src =~ /<%(.*?)%>/
+          result << [:static, $`]
+          case $1[0]
+          when ?#
+            next
+          when ?=
+            text = $1[1..-1].strip
+            head = :dynamic
+          else
+            text = $1
+            head = :block
+          end
+          result << [head, text]
+          src = $'
+        end
+        result << [:static, src]
+        result
+      end
+    end
+{: lang=ruby }
+
+It's important to remember that the _parser should be dumb._ No
+optimization, no guesses. It should produce an Array that is as close to
+the source as possible. That means you'll probably have to invent your own
+abstraction, but _that is exactly the point!_
+
+The Mustache parser compiles to an Array like this:
+
+    [:multi,
+      [:static, "Hello "],
+      [:mustache, :evar, :world],
+      [:mustache, :section, :happy?, 
+        [:mustache, :evar, :greeting]]]
+{: lang=ruby }
+
+And that's fine. The parser should not care about how to compile this
+further down. That's the job to a _filter_.
+
+## Step N: Filters
+
+A filter is a compiler which takes an Array and returns an Array. It might
+turn convert it one step closer to the core-abstraction, it might create a
+new abstraction, or it might just optimize in the current abstraction.
+Ultimately, it's still just a compiler which takes an Array and returns an
+Array.
+
+Temple::_Filters_::Mustache takes an Array in the Mustache-abstraction and
+compiles it down to core. Then it has to be ran through
+Temple::Filters::Escapable which handles HTML escaping.
+
+You might wonder _why_ we split Mustache into a parser and a filter, and
+there are several reasons. Basically it's because the parser shouldn't need
+to worry about the code it should generate. Now it's possible to benchmark,
+rewrite, test and improve the parser, and the parser only.
+
+It's also because there isn't one definite way to go from a Mustache-string
+to the core-abstraction, but there is only one way to go from a Mustache
+string to the Mustache-abstraction. If we want to experiment with another
+way of ending up at core, we can now write it without duplicating the
+parsing code.
+
+Anyway, after you've run it through a few filters, you probably want to
+generate some Ruby code, and that's what a generator does. 
+
+## Step N+1: The generator
+
+A generator is a compiler which takes an Array and returns a String.
+Generators, just like parsers, are dumb too. Here's the ArrayBuffer:
+
+    class ArrayBuffer < Generator
+      def buffer(str = '')
+        '_buf' + str
+      end
+      
+      def preamble;  buffer " = []\n" end
+      def postamble; buffer ".join"   end
+      
+      def on_static(text)
+        buffer " << #{text.inspect}\n"
+      end
+      
+      def on_dynamic(code)
+        buffer " << (#{code})\n"
+      end
+      
+      def on_block(code)
+        code + "\n"
+      end
+    end
+{: lang=ruby }
+
+Temple includes Array, StringBuffer and Interpolation too, even though the last one works kinda funky with blocks and currently only works as expected with Mustache.
+
+## Engines
+
+The user however would only see an engine, which is a chain of compilers: 
+
+    class ERBEngine < Temple::Engine
+      # Here using some helpers, but it's important to remember that
+      # it's only sugar around the #use method shown above.
+      parser :ERB
+      filter :DynamicInliner
+      generator :ArrayBuffer
+    end  
+{: lang=ruby }
+
+The core of Temple::Engine is simple. So simple I'd like to show it to you
+(without the helpers):
+
+    class Engine
+      def self.filters
+        @filters ||= []
+      end
+      
+      def self.use(filter, *args, &blk)
+        filters << [filter, args, blk]
+      end
+      
+      def initialize
+        @chain = self.class.filters.map do |filter, args, blk|
+          filter.new(*args, &blk)
+        end
+      end
+      
+      def compile(thing)
+        @chain.inject(thing) { |prev_thing, compiler| compiler.compile(prev_thing) }
+      end
+    end
+{: lang=ruby }
+
+No magic at all (as long as you understand how inject works). I really like
+how Temple contains many small pieces which does one thing, and they all
+easily stacks up and produce some fairy good Ruby code.
+
+## Another abstraction: Haml and HTML
+
+Okay, so I've shown you two examples: ERB which compiles directly to core,
+and Mustache which uses one abstraction. Now let's have a look at Haml.
+
+Because Haml is so complex, going directly to core can be difficult.
+Instead it might be smart to introduce an HTML-abstraction:
+
+    [:multi,
+      [:html, :tag,
+        :a,
+        [:basicattr, :href, "http://judofyr.net/"],
+        [:static, "Magnus Holm's blog"]]]  
+{: lang=ruby }
+
+There can be several HTML-compilers. One aims for speed (Haml's ugly
+option), one that aims for pretty indentation (Haml's pretty option). And I
+can use the same compiler in Parkaby. If one of these compilers improves
+and generates better code, it's going to improve performance in both Haml
+and Parkaby. Performance wars are going to be so boring!
+
+Nathan Weizenbaum (the maintainer of Haml) told me targeting Haml could be
+difficult, but I'm quite optimistic. It's better to try, fail and learn,
+than not try at all. And to be honest, I'm willing to bend things around to
+make Haml a happy citizen in Temple.
+
+I'd also love to see how Liquid can fit into this mix.
+
+## The goal
+
+So what do I want with all this? I want to experiment! I want to see if
+it's possible to improve on the lowest level of the abstractions, and I'd
+like to see how it affects the upper layers. I'd like to learn more about
+different template engines; how they work, how they are parsed, how they
+perform. I simply want to learn. And I want to share the knowledge.
+
+I want people to experiment and create new concepts in templating. I want
+to see Domain-Specific Template-Languages. I want people to realize that
+creating a template engine is just like creating a programming language,
+just on a smaller scale. Testing frameworks are so boring, why don't try to
+create The Perfect Template Language™?
+
+And, of course, I want *fast* template engines that shares code which each
+other.
+
+But in the end, it's just an experiment. Maybe it's successful, probably
+not, it doesn't matter so much as long as I have fun.
+
+## Join the fun!
+
+I'm the dumb one here, and if you know _anything_ about template engines
+I'd love to hear your thoughts on Temple. In fact, I'd love to hear
+_everybody's_ thoughts on Temple!
+
+If you're interested, please join "the mailing list":ml. The documentation
+is pretty non-existing at the moment, if there are any questions at all,
+please do not hesitate to ask.
+
+The code is available at [github.com/judofyr/temple][temple]
+
+[print]: http://www.kuwata-lab.com/erubis/users-guide.03.html#printout-enhancer
+[arraybuf]: http://www.kuwata-lab.com/erubis/users-guide.03.html#arraybuffer-enhancer
+[stringbuf]: http://www.kuwata-lab.com/erubis/users-guide.03.html#stringbuffer-enhancer
+[ruhl]: http://github.com/stonean/ruhl
+[temple]: http://github.com/judofyr/temple
+[ml]: http://groups.google.com/group/guardians-of-the-temple
+
+
