@@ -1,0 +1,535 @@
+/* GENERAL STYLE */
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+nav, header, article, footer { display: block; }
+
+body {
+  font-size: 16px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+p, ul, ol, pre, hr {
+  margin-bottom: 1em;
+}
+
+h2 {
+  margin-bottom: 0.5em;
+}
+
+blockquote {
+  color: #015406;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 1em;
+  padding: 1em 2em 0;
+}
+
+cite {
+  display: inline;
+  font-style: italic;
+  font-weight: bold;
+}
+
+cite a { color: #015406; }
+
+pre, code {
+  line-height: 1.5;
+  font-family: Monaco;
+  font-size: 12px;
+  padding: 0.5em;
+}
+
+code { padding: 0.2em }
+
+hr {
+  border: 0;
+  border-top: 1px dotted #222; 
+  clear: both;
+}
+
+
+a {
+  color: #666;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.footnotes { font-size: 0.8em; line-height: 1.5 }
+.footnotes p { display: inline }
+
+/* HEADER */
+
+.frontpage .main h1 {
+  font-size: 36px;
+  padding: 20px 0;
+}
+
+.main {
+  background-color: #eee;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 1.5em;
+  text-align: center;
+  width: 100%;
+}
+
+.main h1 {
+  font-size: 21px;
+  font-weight: normal;
+  margin: 0;
+  padding: 10px 0;
+}
+
+h1 a {
+  color: #666;
+  text-decoration: none;
+}
+
+h1 a:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
+h1 strong {
+  color: #A40802;
+}
+
+/* ARTICLE */
+
+article {
+  display: block;
+  font-family: Georgia, serif;
+  line-height: 28px;
+  margin: 0 auto;
+  width: 600px;
+}
+
+article h1 a {
+  color: #000;
+}
+
+/* FOOTER */
+
+footer {
+  border-top: 1px solid #ccc;
+  color: #666;
+  font-family: 'Helvetica Neue';
+  font-size: 13px;
+  line-height: 18px;
+  margin-top: 2em;
+  padding-top: 1em;
+}
+
+footer a {
+  color: #666;
+  text-decoration: underline;
+}
+
+footer a:hover {
+  text-decoration: none;
+}
+
+/* INDEX /
+
+.index {
+  margin-left: -16px;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  font-family: 'Helvetica Neue';
+  font-size: 13px;
+}
+
+.index a {
+  display: block;
+  color: #000;
+}
+
+.index a:hover {
+  background-color: #eee;
+}
+
+.index ul {
+  list-style-type: none;
+  margin-bottom: 0;
+}
+
+.index ul ul {
+  margin-bottom: 0;
+}
+
+.index ul ul {
+  margin-left: 0.5em;
+}
+
+.index ul ul a {
+  border-left: 1px solid #ccc;
+  padding-left: 0.5em;
+}
+
+.index ul ul a:hover {
+}
+
+.index h1 {
+  font-size: 21px;
+}
+
+.index h2 {
+  font-size: 1em;
+  border-bottom: 1px solid #ccc;
+}
+
+.index .column {
+  float: left;
+  padding-left: 16px;
+  width: 189px;
+} */
+
+/* NEW INDEX */
+
+.index {
+  margin-top: 1em;
+  margin-left: -20px;
+}
+
+.index ul {
+  list-style-type: none;
+}
+
+.index a {
+  color: #666;
+  display: block;
+  font-family: 'Helvetica Neue';
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 1.3;
+  text-decoration: none;
+}
+
+.index a p {
+  font-family: Georgia;
+  font-weight: normal;
+  font-style: italic;
+  font-size: 14px;
+}
+
+.index a:hover {
+  color: #000;
+}
+
+.index .column {
+  float: left;
+  margin-left: 20px;
+  width: 290px;
+}
+
+/* CHANGELOG */
+
+.changelog article h1 {
+  font-size: 24px;
+}
+
+/* BUTTONS */
+
+.front-buttons {
+  margin-left: -16px;
+}
+
+.front-buttons a {
+  color: #fff;
+  font-size: 18px;
+  display: block;
+  float: left;
+  line-height: 1.4;
+  margin-left: 16px;
+  text-decoration: none;
+  text-shadow: 1px 1px 1px #666;
+  padding: 0.5em 10px;
+  width: 169px;
+}
+
+.front-buttons a:hover {
+  text-decoration: underline;
+}
+
+.front-buttons a.a {
+  background-color: #98CC35;
+}
+
+.front-buttons a.b {
+  background-color: #D23A36;
+}
+
+.front-buttons a.c {
+  background-color: #52ADB1;
+}
+
+.front-buttons a.d {
+  background-color: #999;
+  font-size: 14px;
+  margin-bottom: 16px;
+  text-align: center;
+  width: 580px;
+}
+
+/* SYNTAX
+
+pre .DiffInserted {
+   background-color: #253B22;
+   color: #F8F8F8;
+}
+pre .DiffHeader {
+   background-color: #0E2231;
+   color: #F8F8F8;
+   font-style: italic;
+}
+pre .CssPropertyValue {
+   color: #F9EE98;
+}
+pre .CCCPreprocessorDirective {
+   color: #AFC4DB;
+}
+pre .Constant {
+   color: #3387CC;
+}
+pre .DiffChanged {
+   background-color: #4A410D;
+   color: #F8F8F8;
+}
+pre .Support {
+   color: #9B859D;
+}
+pre .MarkupList {
+   color: #E1D4B9;
+}
+pre .CssConstructorArgument {
+   color: #8F9D6A;
+}
+pre .Storage {
+   color: #99CF50;
+}
+pre .line-numbers {
+   background-color: #DDF0FF;
+   color: #000000;
+}
+pre .CssClass {
+   color: #9B703F;
+}
+pre .StringConstant {
+   color: #DDF2A4;
+}
+pre .MarkupSeparator {
+   background-color: #242424;
+   color: #60A633;
+}
+pre .MarkupUnderline {
+   text-decoration: underline;
+   color: #E18964;
+}
+pre .CssAtRule {
+   color: #8693A5;
+}
+pre .MetaTagInline {
+   color: #E0C589;
+}
+pre .JEntityNameType {
+   text-decoration: underline;
+}
+pre .LogEntryError {
+   background-color: #751012;
+}
+pre .MarkupHeading {
+   background-color: #632D04;
+   color: #FEDCC5;
+}
+pre .CssTagName {
+   color: #CDA869;
+}
+pre .SupportConstant {
+   color: #CF6A4C;
+}
+pre .MarkupQuote {
+   background-color: #ECD091;
+   color: #E1D4B9;
+   font-style: italic;
+}
+pre .DiffDeleted {
+   background-color: #420E09;
+   color: #F8F8F8;
+}
+pre .CCCPreprocessorLine {
+   color: #8996A8;
+}
+pre .StringRegexpSpecial {
+   color: #CF7D34;
+}
+pre .mbeddedSourceBright {
+   background-color: #ABADB4;
+}
+pre .InvalidIllegal {
+   background-color: #150B15;
+   color: #FD5FF1;
+}
+pre .MarkupRaw {
+   background-color: #ABADB4;
+   color: #578BB3;
+}
+pre .SupportFunction {
+   color: #DAD085;
+}
+pre .CssAdditionalConstants {
+   color: #DD7B3B;
+}
+pre .MetaTagAll {
+   color: #89BDFF;
+}
+pre .StringRegexp {
+   color: #E9C062;
+}
+pre .StringEmbeddedSource {
+   color: #DAEFA3;
+}
+pre .EntityInheritedClass {
+   color: #9B5C2E;
+   font-style: italic;
+}
+pre .MarkupComment {
+   color: #F67B37;
+   font-style: italic;
+}
+pre .MarkupBold {
+   font-weight: bold;
+   color: #E9C062;
+}
+pre .CssId {
+   color: #8B98AB;
+}
+pre .CssPseudoClass {
+   color: #8F9D6A;
+}
+pre .JCast {
+   color: #676767;
+   font-style: italic;
+}
+pre .StringVariable {
+   color: #8A9A95;
+}
+pre .String {
+   color: #65B042;
+}
+pre .Keyword {
+   color: #E28964;
+}
+pre {
+   background-color: #000000;
+   color: #F8F8F8;
+}
+pre .LogEntry {
+   background-color: #C7C7C7;
+}
+pre .MarkupItalic {
+   color: #E9C062;
+   font-style: italic;
+}
+pre .CssPropertyName {
+   color: #C5AF75;
+}
+pre .Namespaces {
+   color: #E18964;
+}
+pre .DoctypeXmlProcessing {
+   color: #494949;
+}
+pre .InvalidDeprecated {
+   color: #FD5FF1;
+   font-style: italic;
+}
+pre .Variable {
+   color: #3E87E3;
+}
+pre .Entity {
+   color: #89BDFF;
+}
+pre .Comment {
+   color: #AEAEAE;
+   font-style: italic;
+}
+
+pre .InheritedClass {
+}
+pre .TypeName {
+   color: #21439C;
+}
+pre .Number {
+}
+pre .LibraryVariable {
+   color: #A535AE;
+}
+pre .Storage {
+   color: #FF5600;
+}
+pre .line-numbers {
+   background-color: #BAD6FD;
+   color: #000000;
+}
+*/
+pre {
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+   background-color: #FFFFFF;
+   color: #000000;
+}
+pre .StringInterpolation {
+   color: #990000;
+}
+pre .TagName {
+}
+pre .LibraryConstant {
+   color: #A535AE;
+}
+pre .FunctionArgument {
+}
+pre .BuiltInConstant {
+   color: #A535AE;
+}
+pre .Invalid {
+   background-color: #990000;
+   color: #FFFFFF;
+}
+pre .LibraryClassType {
+   color: #A535AE;
+}
+pre .LibraryFunction {
+   color: #A535AE;
+}
+pre .TagAttribute {
+}
+pre .Keyword {
+   color: #FF5600;
+}
+pre .UserDefinedConstant {
+}
+pre .String {
+   color: #00A33F;
+}
+pre .FunctionName {
+   color: #21439C;
+}
+pre .Variable {
+}
+pre .Comment {
+   color: #919191;
+}
