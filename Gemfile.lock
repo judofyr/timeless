@@ -1,0 +1,47 @@
+--- 
+dependencies: 
+  maruku: 
+    group: 
+    - :default
+    version: ">= 0"
+  ultraviolet: 
+    group: 
+    - :default
+    version: ">= 0"
+  haml: 
+    group: 
+    - :default
+    version: ">= 0"
+  camping: 
+    group: 
+    - :default
+    version: ">= 0"
+  tilt: 
+    group: 
+    - :default
+    version: ">= 0"
+specs: 
+- rack: 
+    version: 1.2.1
+- camping: 
+    version: "2.1"
+- haml: 
+    version: 3.0.17
+- syntax: 
+    version: 1.0.0
+- maruku: 
+    version: 0.6.0
+- oniguruma: 
+    version: 1.1.0
+- plist: 
+    version: 3.0.0
+- textpow: 
+    version: 0.10.1
+- tilt: 
+    version: 1.0.1
+- ultraviolet: 
+    version: 0.10.2
+hash: 6dc35b9a70de5d22714e97a5a3bd3a38b9a7f725
+sources: 
+- Rubygems: 
+    uri: http://rubygems.org/
