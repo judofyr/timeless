@@ -1,0 +1,22 @@
+!!!
+%head
+  %meta(charset="utf-8")
+  %title Timeless from Magnus Holm
+  %link{:rel => "stylesheet", :href => R(Stylesheet)}
+
+%body(class=main_class)
+  %header(class="main")
+    %h1
+      %a{:href => R(Index)}
+        Magnus Holm's <strong>timeless</strong> repository
+  
+  %article
+    != yield
+    
+    %footer
+      %p
+        2010 ©
+        %a(href="mailto:judofyr@gmail.com") Magnus Holm
+        —
+        %a{:href => R(Entry, 'comments')} Leave a comment
+      

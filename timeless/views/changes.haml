@@ -1,0 +1,7 @@
+%header
+  %h1 Recent Changes
+
+%div(class="changelog")
+  - @changes.each do |change|
+    != render :_change, :locals => { :change => change }
+
