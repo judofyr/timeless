@@ -34,6 +34,10 @@ module Timeless::Models
       type == :entry ? entry.title : content["title"]
     end
 
+    def to_full_html
+      type == :entry ? entry.to_html : to_html
+    end
+
     def to_html
       type == :entry ? entry.to_snip : Maruku.new(content["text"]).to_html
     end
