@@ -112,7 +112,7 @@ h1 strong {
 
 article {
   display: block;
-  font-family: Georgia, serif;
+  font-family: Georgia, "Times New Roman", serif;
   line-height: 28px;
   margin: 0 auto;
   width: 600px;
@@ -127,7 +127,7 @@ article h1 a {
 footer {
   border-top: 1px solid #ccc;
   color: #666;
-  font-family: 'Helvetica Neue';
+  font-family: 'Helvetica Neue', Arial, sans-serif;
   font-size: 13px;
   line-height: 18px;
   margin-top: 2em;
@@ -212,7 +212,7 @@ footer a:hover {
 .index a {
   color: #666;
   display: block;
-  font-family: 'Helvetica Neue';
+  font-family: 'Helvetica Neue', Arial, sans-serif;
   font-weight: bold;
   font-size: 18px;
   line-height: 1.3;
@@ -220,7 +220,7 @@ footer a:hover {
 }
 
 .index a p {
-  font-family: Georgia;
+  font-family: Georgia, "Times New Roman", serif;
   font-weight: normal;
   font-style: italic;
   font-size: 14px;
