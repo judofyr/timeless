@@ -20,6 +20,7 @@ class NotFound < StandardError; end
 module Timeless
   set :views, File.dirname(__FILE__) + '/timeless/views'
   set :dynamic_templates, true
+  set :last_modified, Time.now
   
   set :haml, {
     :format => :html5,
@@ -28,6 +29,15 @@ module Timeless
   }
 
   def service(*a)
+    if last = @env['HTTP_LAST_MODIFIED_SINCE'] and
+       Time.parse(last).to_i >= Timeless.options[:last_modified].to_i
+
+      @status = 304
+      @body = []
+      return self
+    end
+
+    @headers['Last-Modified'] = Timeless.options[:last_modified].rfc2822
     super
   rescue NotFound
     @status = 404
