@@ -75,6 +75,8 @@ module Timeless::Controllers
         end
       end
     end
+
+    def title; @change.title; end
   end
 
   class Feed < R '/changelog\.xml'
@@ -97,6 +99,8 @@ module Timeless::Controllers
         render :entry
       end
     end
+
+    def title; @entry.title; end
   end
 end
 
