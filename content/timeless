@@ -43,9 +43,9 @@ Because I don't want to write about changes. I don't have what it takes to
 maintain a blog and post regularly. All I want to do is to *write*. Not often,
 not always, but still: there are times when I simply want to write.
 
-If I'm not going to take advantage of the blog, then why should I be impeded by
-the disadvantages? Why do I feel I'm *obliged* to add a timestamp to each post?
-Why do I feel I'm *not allowed* to change or update the posts?
+If I'm not going to take advantage of the blog medium, then why should I be
+impeded by the disadvantages? Why do I feel I'm *obliged* to add a timestamp to
+each post?  Why do I feel I'm *not allowed* to change or update the posts?
 
 I feel brainwashed, and Timeless is my attempt at breaking out of the prison.
 
@@ -66,4 +66,17 @@ This gives me the perfect flexibilty: New readers can browser and explore the
 content like it's a wiki, while returning readers can easily see if there's any
 updated content. If you want to be notifed about further updates, you can
 simply subscribe to the feed, just like a normal blog.
+
+## This is just the beginning...
+
+What you are seeing here is only the first version of Timeless. It's far from
+complete, but definitely *good enough* for now. In the future I hope to add
+more features (like tags, sub-articles and maybe even comments), but there's no
+point of implementing something before I actually need it.
+
+If you're still interested in Timeless, you can [subscribe to the
+feed](http://feeds.feedburner.com/MagnusHolm) or follow the project at
+[GitHub](http://github.com/judofyr/timeless).
+
+Please let me know if you [have any comments, thoughts or questions](/comments).
 
