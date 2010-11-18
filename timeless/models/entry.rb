@@ -3,11 +3,19 @@ module Timeless::Models
     attr_reader :name
 
     def self.all
-      entries.map { |name| new(name) }
+      @all ||= entries.map { |name| new(name, true) }
     end
 
     def self.entries
       Dir["content/*"].reject { |f| f =~ /~/ }.map { |f| File.basename(f) }
+    end
+
+    def self.new(name, force = false)
+      if force
+        super(name)
+      else
+        all.detect { |e| e.name == name } or raise NotFound
+      end
     end
 
     def initialize(name)
@@ -22,7 +30,7 @@ module Timeless::Models
     def exists?;  File.exists?(filename) end
   
     def to_html
-      file? ? content : maruku.to_html
+      file? ? content : (@html ||= maruku.to_html)
     end
   
     def title
