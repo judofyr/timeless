@@ -10,6 +10,10 @@ require 'haml'
 require 'maruku'
 require './maruku-uv'
 
+require 'new_relic/agent'
+require 'new_relic/agent/instrumentation/controller_instrumentation'
+NewRelic::Agent.manual_start
+
 Camping.goes :Timeless
 
 require './timeless/models/entry'
@@ -18,6 +22,8 @@ require './timeless/models/change'
 class NotFound < StandardError; end
 
 module Timeless
+  include NewRelic::Agent::Instrumentation::ControllerInstrumentation
+
   set :views, File.dirname(__FILE__) + '/timeless/views'
   set :dynamic_templates, true
   set :last_modified, Time.now
@@ -38,7 +44,10 @@ module Timeless
     end
 
     @headers['Last-Modified'] = Timeless.options[:last_modified].rfc2822
-    super
+
+    perform_action_with_newrelic_trace(:category => :rack) do
+      super
+    end
   rescue NotFound
     @status = 404
     @method = :r404

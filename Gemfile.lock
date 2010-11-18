@@ -6,6 +6,7 @@ GEM
     haml (3.0.21)
     maruku (0.6.0)
       syntax (>= 1.0.0)
+    newrelic_rpm (2.13.3)
     oniguruma (1.1.0)
     plist (3.1.0)
     rack (1.2.1)
@@ -24,5 +25,6 @@ DEPENDENCIES
   camping
   haml
   maruku
+  newrelic_rpm
   tilt
   ultraviolet

@@ -11,3 +11,6 @@ gem "haml"
 gem "maruku"
 gem "ultraviolet"
 
+# New Relic
+gem "newrelic_rpm"
+
