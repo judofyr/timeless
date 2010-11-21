@@ -2,7 +2,7 @@ Title: Morse
 Subtitle: Morse code encoder/decoder in Ruby
 HTML use syntax: true
 
-Some of you might have noticed my [little attempt on refactoring](refmycode).
+Some of you might have noticed my [little attempt on refactoring][refmycode].
 However, I quickly realized that it could be solved in a much simpler way:
 
     module                    Morse
