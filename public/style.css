@@ -48,7 +48,7 @@ cite a { color: #015406; }
 
 pre, code {
   line-height: 1.5;
-  font-family: Monaco;
+  font-family: Monaco, monospace;
   font-size: 12px;
   padding: 0.5em;
 }
