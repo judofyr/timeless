@@ -66,13 +66,6 @@ module Timeless::Controllers
     def main_class; "frontpage" end
   end
   
-  class Stylesheet < R '/style\.css'
-    def get
-      @headers['Content-Type'] = "text/css"
-      File.read("public/style.css")
-    end
-  end
-
   class Changelog < R '/changelog'
     def get
       @headers['Cache-Control'] = 'public, max-age=3600'

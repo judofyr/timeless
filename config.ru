@@ -5,4 +5,7 @@ if ENV['RACK_ENV'] != "production"
   use NewRelic::Rack::DeveloperMode
 end
 
-run Timeless
+public = Rack::File.new('public')
+app    = Timeless
+
+run Rack::Cascade.new([public, app])
