@@ -1,0 +1,8 @@
+---
+created_at: Wed Nov 24 15:05:23 +0100 2010
+entry: tailin-ruby
+update: |
+  Roman Semenenko reported in that there's *yet* another way to use tail-call
+  optimizations in Ruby. I've updated the article with some details on how to use
+  it, and also updated the benchmark so you can easily compare the performance
+  between the different methods.

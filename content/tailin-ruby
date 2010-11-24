@@ -143,6 +143,40 @@ we're dealing with Ruby:
     fib(10000)  # Yeah!
 {: lang=ruby }
 
+## Native Support in 1.9.2
+
+It turns out that there's *yet* another way to achive tail call optimization in
+Ruby: Ruby 1.9.2 actually ships with native support, but it's disabled by
+default. You can either enable it through a compile-flag or by specifying the
+compile options at runtime (thanks a lot to Roman Semenenko for showing me this
+trick!):
+
+    RubyVM::InstructionSequence.compile_option = {
+      :tailcall_optimization => true,
+      :trace_instruction => false
+    }
+    
+    RubyVM::InstructionSequence.new(<<-EOF).eval
+      def acc(i, n, result)
+        if i == -1
+          result
+        else
+          acc(i - 1, n + result, n)
+        end
+      end
+
+      def fib(i)
+        acc(i, 1, 0)
+      end
+    EOF
+{: lang=ruby }
+
+Notice that the compile options will only be used for the code you pass into
+InstructionSequence, not any regular code. Also be aware of that these tail
+call optimazations are considered experimental and there might be bugs related
+to them (like [#4082][4082]). However, they perform pretty good (see the
+TCO-graph below).
+
 ## The Benchmark
 
 So, how fast is it? Take a look below:
@@ -162,3 +196,5 @@ Nifty, eh?
 [catch-tail]: http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/145593
 [rpl]: http://www.amazon.com/Ruby-Programming-Language-David-Flanagan/dp/0596516177
 [source]: http://github.com/judofyr/recursive
+[4082]: http://redmine.ruby-lang.org/issues/show/4082
+
