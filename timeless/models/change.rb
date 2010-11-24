@@ -1,5 +1,8 @@
 module Timeless::Models
   class Change
+    CONTINUE = '<p><a href="%s">Continue to full post.</a></p>'
+    UPDATED = CONTINUE.sub('full', 'updated')
+
     attr_reader :id
 
     def self.last
@@ -27,27 +30,62 @@ module Timeless::Models
     def created_at; Time.parse(self["created_at"]) end
 
     def type
-      content.has_key?("entry") ? :entry : :text
+      if content.has_key?("update")
+        :update
+      elsif content.has_key?("entry")
+        :entry
+      else
+        :text
+      end
     end
 
     def title
-      type == :entry ? entry.title : content["title"]
+      case type
+      when :entry
+        entry.title
+      when :update
+        "Updated: " + entry.title
+      when :text
+        content["title"]
+      end
     end
 
     def to_full_html
-      type == :entry ? entry.to_html : to_html
+      case type
+      when :entry
+        entry.to_html
+      when :update
+        to_html
+      when :text
+        to_html
+      end
     end
 
     def to_html
-      type == :entry ? entry.to_snip : Maruku.new(content["text"]).to_html
+      case type
+      when :entry
+        entry.to_snip + (CONTINUE % url)
+      when :update
+        htmlize(:update) + (UPDATED % url)
+      when :text
+        htmlize(:text)
+      end
     end
 
     def url
-      type == :entry ? "/#{entry.name}" : "/changelog/#{@id}"
+      if type == :text
+        "/changelog/#{@id}"
+      else
+        "/#{entry.name}"
+      end
     end
 
     def entry
       @entry ||= Entry.new(content["entry"])
+    end
+
+    def htmlize(field)
+      Maruku.new(content[field.to_s]).to_html
     end
   end
 end
