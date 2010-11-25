@@ -74,9 +74,9 @@ module Timeless::Models
 
     def url
       if type == :text
-        "/changelog/#{@id}"
+        "http://timeless.judofyr.net/changelog/#{@id}"
       else
-        "/#{entry.name}"
+        "http://timeless.judofyr.net/#{entry.name}"
       end
     end
 
