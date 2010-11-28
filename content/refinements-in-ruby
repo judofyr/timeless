@@ -120,7 +120,7 @@ However, now you can choose to use this refinement at many different scopes:
     1.to_json
     
     module Application
-      using JSONGenerator     # For this module and any sub-classes/modules
+      using JSONGenerator     # For this module and any nested classes and modules
                               # E.g. this also applies to Application::Controller
       
       # It works directly inside the class definition:
@@ -132,7 +132,7 @@ However, now you can choose to use this refinement at many different scopes:
       end
       
       class Controllers
-        using JSONGenerator   # For this class and any sub-classes/modules
+        using JSONGenerator   # For this class and any nested classes and modules
         
         def get
           using JSONGenerator # For this method only
