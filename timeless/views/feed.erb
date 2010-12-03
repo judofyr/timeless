@@ -15,7 +15,7 @@
   <entry>
     <title><%= change.title %></title>
     <id>tag:timeless.judofyr.net,<%=c.xmlschema[0..9]%>:<%=c.to_i%></id>
-    <link href="http://timeless.judofyr.net<%= change.url %>"/>
+    <link href="<%= change.url %>"/>
     <updated><%= c.xmlschema %></updated>
     <published><%= c.xmlschema %></published>
     <content type="html"><![CDATA[<%= change.to_full_html %>]]></content>
