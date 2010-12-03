@@ -173,7 +173,7 @@ trick!):
 
 Notice that the compile options will only be used for the code you pass into
 InstructionSequence, not any regular code. Also be aware of that these tail
-call optimazations are considered experimental and there might be bugs related
+call optimization are considered experimental and there might be bugs related
 to them (like [#4082][4082]). However, they perform pretty good (see the
 TCO-graph below).
 
