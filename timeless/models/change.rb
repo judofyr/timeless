@@ -27,7 +27,10 @@ module Timeless::Models
     end
 
     def [](key); content[key.to_s]; end
-    def created_at; Time.parse(self["created_at"]) end
+    def created_at
+      c = self["created_at"]
+      c.is_a?(String) ? Time.parse(c) : c
+    end
 
     def type
       if content.has_key?("update")
