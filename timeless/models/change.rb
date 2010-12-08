@@ -67,19 +67,23 @@ module Timeless::Models
     def to_html
       case type
       when :entry
-        entry.to_snip + (CONTINUE % url)
+        entry.to_snip + (CONTINUE % full_url)
       when :update
-        htmlize(:update) + (UPDATED % url)
+        htmlize(:update) + (UPDATED % full_url)
       when :text
         htmlize(:text)
       end
     end
+    
+    def full_url
+      "http://timeless.judofyr.net#{url}"
+    end
 
     def url
       if type == :text
-        "http://timeless.judofyr.net/changelog/#{@id}"
+        "/changelog/#{@id}"
       else
-        "http://timeless.judofyr.net/#{entry.name}"
+        "/#{entry.name}"
       end
     end
 
