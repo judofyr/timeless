@@ -5,7 +5,7 @@
     - if respond_to?(:title)
       = title
       —
-    Timeless from Magnus Holm
+    Timeless
   /[if lt IE 9]
     %script(src="http://html5shim.googlecode.com/svn/trunk/html5.js")
   %link{:rel => "stylesheet", :href => '/style.css'}
@@ -25,7 +25,7 @@
   %header(class="main")
     %h1
       %a{:href => R(Index)}
-        Magnus Holm's <strong>timeless</strong> repository
+        The <strong>timeless</strong> repository
   
   %article
     != yield
@@ -34,6 +34,8 @@
       %p
         2010 ©
         %a(href="http://judofyr.net/") Magnus Holm
+        and
+        %a(href="http://www.steveklabnik.com/") Steve Klabnik
         —
         %a{:href => R(Entry, 'comments')} Leave a comment
       
