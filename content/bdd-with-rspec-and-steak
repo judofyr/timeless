@@ -318,7 +318,7 @@ And run them:
 
     $ rake spec
     *snip*
-    4) Discussion#add_subscription! adds a new email to the subscription list
+    4) Discussion#create_subscription! adds a new email to the subscription list
        Failure/Error: discussion.subscribed_users.count.should == 0
        undefined method `subscribed_users' for #<Discussion:0x1037ec3a0>
 
@@ -330,9 +330,9 @@ Okay, so we have no subscribed_users. Let's add an array of Strings to our model
 And run some specs:
 
     $ rake spec
-    4) Discussion#add_subscription! adds a new email to the subscription list
-       Failure/Error: discussion.add_subscription! "somebody@example.com"
-       undefined method `add_subscription!' for #<Discussion:0x10384c570>
+    4) Discussion#create_subscription! adds a new email to the subscription list
+       Failure/Error: discussion.create_subscription! "somebody@example.com"
+       undefined method `create_subscription!' for #<Discussion:0x10384c570>
 
 Okay! Time to get rid of most of these errors. Let's add an create_subscription! method:
 
@@ -375,7 +375,6 @@ Two big failures here: our acceptance test isn't seeing an email, and our subscr
 
     def create_subscription! email
       subscribed_users << email
-      save
     end
 {: lang=ruby }
 
