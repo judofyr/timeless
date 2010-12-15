@@ -18,11 +18,11 @@ Behavior Driven Development is a test-first software development methodology. It
 * Refactor one last time, run all of your tests, make sure they all pass.
 * Congrats! Your feature is ready!
 
-This might seem pretty complicated, but it's actually relatively straightforward. "But how does this apply to the Real World?" you may ask. Well, I'll show you: Here's a story that I'm writing for the Hackety Hack website. I'm the only stakeholder, so it's easy to make executive decisions. Here's the story:
+This might seem pretty complicated, but it's actually relatively straightforward. Let's go through a story that I'm writing for the Hackety Hack website. I'm the only stakeholder, so it's easy to make executive decisions. Here's the story:
 
 As a user, I'd like the option to subscribe to forums and threads, and get notifications about updates.
 
-Sounds pretty useful to me! Email is like a to-do list for me, and I want to make sure I'm kept up-to-date with any discussions. This story can be broken up into a few different features. Here they are:
+Sounds pretty useful to me! I use email as a to-do list, and I want to make sure I'm kept up-to-date with any discussions. This story can be broken up into a few different features. Here they are:
 
     Scenario: Subscribing to a thread
       Given I've commented in a thread
@@ -51,7 +51,7 @@ Sounds pretty useful to me! Email is like a to-do list for me, and I want to mak
       And someone makes a new thread in that forum
       Then I should not receive an email
 
-Cool! Four scenarios to make up this feature. You'll notice that I'm using certain language to talk about each scenario: Given, When, and Then. This language, while not mandatory is helpful: Most features involve some sort of initial system setup, an event that kicks something off, and then an effect that you want to see created. Thinking in these terms is helpful.
+Cool! Four scenarios to make up this feature. You'll notice that I'm using certain language to talk about each scenario: Given, When, and Then. These words, while not mandatory are helpful: Most features involve some sort of initial system setup, an event that kicks something off, and then an effect that you want to see created. Thinking in these terms can be a useful way of getting started with a story or feature.
 
 Okay! So let's work on the first scenario: subscribing to a thread. There are a few different libraries that can used with Ruby for acceptance testing. Cucumber can actually be used to read these specifications as I've written them, but lately, I've come around to a simpler tool: Steak. If you'd like to follow along, you can check out a copy of the site like this:
 
@@ -401,3 +401,4 @@ And there it is: our second unit test that's still pending is testing our email,
 
 I'm going to continue updating this article in the future, going through the rest of the process of adding the rest of the necessary specs and features. As always, [comments are always welcomed](/comments).
 
+Thanks to Dan Dorman and Lonny Eachus for a few suggestions and fixes.
