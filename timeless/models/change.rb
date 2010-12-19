@@ -2,16 +2,18 @@ module Timeless::Models
   class Change
     CONTINUE = '<p><a href="%s">Continue to full post.</a></p>'
     UPDATED = CONTINUE.sub('full', 'updated')
+    ALL = Dir["changes/*.yaml"].map { |x| x[/\d+/].to_i }.sort
+    LAST = ALL.last
 
     attr_reader :id
 
     def self.last
-      new(Dir["changes/*.yaml"].sort.last[/\d+/])
+      new(LAST)
     end
 
     def self.all(options = {})
       limit = (options[:limit] || 0) - 1
-      Dir["changes/*.yaml"].sort.reverse[0..limit].map { |c| new(c[/\d+/]) }
+      ALL.reverse.map { |x| new(x) }
     end
 
     def initialize(id)
