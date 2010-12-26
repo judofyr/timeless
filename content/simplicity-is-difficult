@@ -1,0 +1,22 @@
+Title: Simplicity is difficult
+Subtitle: Do the minimum, 'cuz YAGNI
+
+Advice is really easy to give to others, but really hard to take yourself.
+
+A long time ago, I decided that it was a good idea to fight for simplicity. It's something to strive for. There's beauty in simplicity. Yet... simplicity is incredibly difficult. (snip) I spend a lot of time on Hacker News, and there's been a lot of discussion about "Minimum Viable Products." I don't find it hard at all to point at someone else's project and say "You wouldn't need this, you wouldn't need that, you could have left this off." But when looking at my own projects, it's incredibly hard.
+
+Such was the story with the Hackety Hack 1.0 release. I could have had 1.0 out in September rather than December if I'd only realized just how much stuff I was trying to work on that was absolutely unnecessary. I'm not sure exactly at what point this became clear to me, but I think it was the second or third time someone joked, "You've said 1.0 is a week away for the last three months." It finally hit me: many things weren't really necessary in a 1.0 release. Many of the things that were taking me so much time were also the parts that had the most bugs, were causing the most problems, and were the most complicated portions.
+
+An interesting aside: I think that git has really enabled me to [code fearlessly](http://cam.ly/blog/2010/12/code-fearlessly/). I don't worry any more about throwing away code, because it's all in the history. I don't mind trying out a new way of doing things, or starting a major refactoring, or anything else: The worst thing that'll happen is that I'll be forced to `git reset --hard` or `git branch -D`. Oh well. My app will survive.
+
+So that's what I did for 1.0. I gave the whole application a hard once-over:
+
+* Does this feature work as intended?
+* How hard will that bug be to fix?
+* Is it really necessary?
+
+If I didn't hear the correct answer, I `git rm`-ed with near reckless abandon. All of that code is going to be back someday, as all of those features are good things. But they weren't actually needed. They were icing on the cake. What I really needed was to get some steak out the door, and to hell with the sizzle.
+
+I also totally re-wrote the website component for Hackety as well. Once again, I ruthlessly cut scope. I actually cut it farther than I even thought would be okay, but you know what: it was okay. For the first few hours that the site was up, you could ask a question, but there'd be no way to answer it! Of course, later in the evening, I made that possible. But to get a release out the door and in the hands of users, it wasn't necessary.
+
+Finding what's absolutely important and what's not is still an art, at first. Once you have users, you can figure out what they want by tracking what they do, or by asking for feedback directly. But I'll be constantly repeating to myself, "YAGNI. YAGNI. YAGNI."
