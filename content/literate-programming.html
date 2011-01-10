@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>literate-programming.rb</title>
+  <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>literate-programming.rb</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-1">#</a>
+        </div>
+        <p> <em>Literate programming</em> is a method of crafting software that Don Knuth described in 1984 in his paper <a href="http://www.literateprogramming.com/knuthweb.pdf">Literate Programming</a>. A literate program places emphasis on the way that people understand the problem a particular piece of software is attempting to solve, rather than the way that computers interpret the source code.</p>
+
+<p> This is an example of literate programming using <a href="https://github.com/rtomayko/rocco">Rocco</a>. This <code>literate-programming.html</code> file is the output of running <code>rocco content/literate-programming.rb</code> from the root directory of the <a href="https://github.com/judofyr/timeless">Timeless source code</a>. You can also view <a href="/literate-programming.rb">literate-programming.rb</a> directly.</p>
+
+<p> If you&rsquo;ve been linked here from somewhere external, this article is part of
+ <a href="http://timeless.judofyr.net">Timeless</a>. Since this page was generated with
+ a different tool, it looks differently than the rest of the site. Please
+ forgive my small navigational error, as I think that writing a post in a tool
+ it&rsquo;s describing is interesting enough to create a small crisis of navigation.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-2'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-2">#</a>
+        </div>
+        <h2>Some Setup</h2>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-3">#</a>
+        </div>
+        <p> This particular source code file is a <code>Rakefile</code>, meaning that it can be run
+ using the the <code>-f</code> switch to <code>Rake</code>:</p>
+
+<pre><code> rake -f content/literate-programming.rb
+</code></pre>
+
+<p> This will run the <em>default</em> task, which will run <code>rocco</code> on the Ruby file and
+ output the proper HTML.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;rake&#39;</span>
+
+<span class="n">desc</span> <span class="s2">&quot;Generate documentation&quot;</span>
+<span class="n">task</span> <span class="ss">:default</span> <span class="k">do</span>
+  <span class="n">sh</span> <span class="s2">&quot;rocco content/literate-programming.rb&quot;</span>
+<span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-4'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-4">#</a>
+        </div>
+        <p> We&rsquo;re also going to allow running this file with a regular <code>ruby
+ content/literate-programming.rb</code>, so in order to facilitate this, I&rsquo;m going
+ to write a <code>method_missing</code> that simply catches all unnamed methods and
+ returns <code>true</code>. If you&rsquo;re not a Rubyist, then don&rsquo;t worry about this too much;
+ basically it&rsquo;s what lets my illustrations later work without causing
+ a software error. This would normally be bad programming practice, but this
+ is an illustrative, experimental file. You&rsquo;d never encounter this in a &lsquo;real&rsquo;
+ program.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="k">def</span> <span class="nf">method_missing</span><span class="p">(</span><span class="n">sym</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+  <span class="kp">true</span>
+<span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-5'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-5">#</a>
+        </div>
+        <p> I also need to do this with <code>gets</code>, or else the program will hang, waiting
+ for input.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="k">def</span> <span class="vg">$stdin</span><span class="o">.</span><span class="n">gets</span>
+  <span class="kp">nil</span>
+<span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-6'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-6">#</a>
+        </div>
+        <h2>How it&rsquo;s done now</h2>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-7'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-7">#</a>
+        </div>
+        <p> Of course, I know that you&rsquo;d never write software in this way, but maybe you
+ have a friend? I&rsquo;ve heard that lots of people out there write code like this:</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="n">namespace</span> <span class="ss">:build</span> <span class="k">do</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-8'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-8">#</a>
+        </div>
+        <h4>Steps to create software.</h4>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-9'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-9">#</a>
+        </div>
+        <ul>
+<li>Sit down at the computer, and bang out a bunch of code.</li>
+<li>Then, we open our creation, and try it out. If it has some bugs, fix them
+over and over until we&rsquo;re pretty sure they&rsquo;re gone.</li>
+<li>At this point, we should be bug free. Let&rsquo;s cross our fingers! We probably
+should write a few comments in our code, and then let&rsquo;s send it off to users!</li>
+</ul>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="n">task</span> <span class="ss">:poor</span> <span class="k">do</span>
+    <span class="n">write_code</span>
+    <span class="n">try_program</span>
+
+    <span class="k">until</span> <span class="n">it_works?</span>
+      <span class="n">fix_bugs</span>
+    <span class="k">end</span>
+    <span class="n">write_some_comments</span>
+    <span class="n">ship_it</span>
+  <span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-10'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-10">#</a>
+        </div>
+        <p> Now, the problem comes when we find more bugs later in the program&rsquo;s
+ lifetime. If it&rsquo;s been a while since you&rsquo;ve last seen this code, you&rsquo;re
+ going to need some help getting up to speed. Hopefully you did a good job in
+ <code>write_some_comments</code>!</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-11'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-11">#</a>
+        </div>
+        <h2>We can do better than this!</h2>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-12'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-12">#</a>
+        </div>
+        <p> I&rsquo;m sure that at your shop, it looks a little bit different. You care about
+ documentation, because you know that when you have to look at your code
+ later, or when you have to bring a new member on board, you have an education
+ problem. The knowledge was either forgotten or was never there in the first
+ place, and now you&rsquo;ve gotta have it. So what do you do? Documentation. That
+ way, when that new hire is learning her way around the codebase, she can just
+ read your documentation!</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="n">task</span> <span class="ss">:better</span> <span class="k">do</span>
+    <span class="n">write_code</span>
+    <span class="n">write_documentation</span>
+
+    <span class="n">try_program</span>
+
+    <span class="k">until</span> <span class="n">it_works?</span>
+      <span class="n">fix_bugs</span>
+    <span class="k">end</span>
+
+    <span class="n">ship_it</span>
+  <span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-13'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-13">#</a>
+        </div>
+        <p> This is pretty good, but it&rsquo;s still not as good as we can do. There&rsquo;s two
+ problems with this approach:</p>
+
+<ul>
+<li>You&rsquo;re still doing the documentation after the fact.</li>
+<li>Your documentation is divorced from your code itself.</li>
+</ul>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-14'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-14">#</a>
+        </div>
+        <p> Let&rsquo;s delve into each of these.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-15'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-15">#</a>
+        </div>
+        <h2>Documentation afterward</h2>
+
+<p> I initially became a big fan of test-first development methodologies when
+ I came to terms with something about myself: As soon as my code &lsquo;works,&rsquo;
+ I feel like it&rsquo;s done. I want to ship it out the door. I also feel this way
+ about writing; I find editing myself after the fact to be a bit tedious, and
+ it&rsquo;s difficult for me to be as hard on myself as I should be. It&rsquo;s already
+ written, just post it already!</p>
+
+<p> That&rsquo;s why I&rsquo;m a big fan of putting off coding to the absolute last part of
+ a project. Here&rsquo;s some things I&rsquo;d rather be doing before writing code:</p>
+
+<ul>
+<li>Thinking about the problem that I&rsquo;m going to solve, and different ways of
+solving it.</li>
+<li>Investigating similar solutions that others have used in the past.</li>
+<li>Writing automated tests.</li>
+<li>Writing documentation.</li>
+</ul>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-16'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-16">#</a>
+        </div>
+        <p> Yep, that&rsquo;s right. I&rsquo;m not perfect at this, but lately I&rsquo;ve come to the
+ conclusion that documentation is important enough that I need to do it
+ <em>first</em>, otherwise, it&rsquo;ll never get done. Tom Preston-Warner says it better
+ than I can in
+ <a href="http://tom.preston-werner.com/2010/08/23/readme-driven-development.html">README driven development</a>.</p>
+
+<blockquote><p>Consider the process of writing the Readme for your project as the true act of creation. This is where all your brilliant ideas should be expressed. This document should stand on its own as a testament to your creativity and expressiveness. The Readme should be the single most important document in your codebase; writing it first is the proper thing to do.</p></blockquote>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="n">task</span> <span class="ss">:best</span> <span class="k">do</span>
+    <span class="n">think_about_problem</span>
+    <span class="n">check_for_existing_libraries</span>
+    <span class="n">write_documentation</span>
+    <span class="n">write_tests</span>
+    <span class="n">write_code</span>
+  <span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-17'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-17">#</a>
+        </div>
+        <p> While maybe a bit dramatic, Tom&rsquo;s got it right: Documentation is important.
+ So do it first.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-18'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-18">#</a>
+        </div>
+        <h2>Documentation and code aren&rsquo;t together</h2>
+
+<p> The only thing worse than having no documentation is having documentation
+ that&rsquo;s wrong. Or that&rsquo;s only&hellip; sort of right.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-19'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-19">#</a>
+        </div>
+        <p> Returns the value of π</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="k">def</span> <span class="nf">pi</span>
+  <span class="mi">3</span>
+<span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-20'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-20">#</a>
+        </div>
+        <p> Ugh! I mean, this is <em>sort</em> of correct, but probably not what you were
+ expecting.</p>
+
+<p> This problem is a subtle one. Nobody sets out to write poor explanations. In
+ fact, I bet the first version of the <code>pi</code> method probably looked like this:</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-21'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-21">#</a>
+        </div>
+        <p> Returns the value of π</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="k">def</span> <span class="nf">pi</span>
+  <span class="no">Math</span><span class="o">::</span><span class="no">PI</span>
+<span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-22'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-22">#</a>
+        </div>
+        <p> But then, as times change, the <code>pi</code> method need to change, too. Now,
+ changing the value of <code>pi</code> seems really stupid, but maybe your new programmer
+ is a junior. Or you&rsquo;re coding while drinking. Or you&rsquo;ve just plain had a bad
+ day, and aren&rsquo;t thinking straight. Nobody is at the top of their game 100% of
+ the time. This is where the danger lies: Your code and your documentation
+ gets out of synch. It happens to the best of us.</p>
+
+<p> The easiest way to make sure that your documentation stays up to date is to
+ keep it as close as possible to the code that you&rsquo;re changing. If the
+ description is staring you in the face, it&rsquo;s harder to ignore.</p>
+
+<p> We have tools to aid you in doing this. Docco is one of them. RDoc or JavaDoc
+ are others. They extract the comments that you write and turn them into
+ webpages, so that you can share them with others.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-23'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-23">#</a>
+        </div>
+        <h2>Software as a web of docs and code</h2>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-24'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-24">#</a>
+        </div>
+        <p> While tools like Docco are fantastic, they&rsquo;re not <em>real</em> literate
+ programming. Literate software means more than just &ldquo;cleverly pull comments
+ out of code and turn it into HTML.&rdquo; To truly understand literate programming,
+ we need to consider the nature of what combining code and documentation
+ actually means. Knuth gives us a clue:</p>
+
+<blockquote><p>The main point is that [a literate program] is inherently bilingual, and
+ that such a combination of languages proves to be much more powerful than
+ either single language by itself. [Literate programming] does not make the
+ other languages obsolete; on the contrary, it enhances them.</p></blockquote>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="k">class</span> <span class="nc">LiterateProgram</span>
+  <span class="kp">attr_accessor</span> <span class="ss">:source</span>
+  <span class="kp">attr_accessor</span> <span class="ss">:documentation</span>
+<span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-25'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-25">#</a>
+        </div>
+        <p> This duality is incredibly important in understanding why literate
+ programming is actually different from what&rsquo;s been done before; it&rsquo;s an
+ observation that gets to the core of what it means to write software. One of
+ my favorite quotes on software comes from the preface of the first edition of
+ <a href="http://mitpress.mit.edu/sicp/full-text/book/book.html">The Structure and Interpretation of Computer Programs</a>:</p>
+
+<blockquote><p>Programs must be written for people to read, and only incidentally for machines to execute.</p></blockquote>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-26'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-26">#</a>
+        </div>
+        <p> But unfortunately, while human languages are excellent at describing broad
+ ideas, they&rsquo;re generally poor at the exact specifics that computers need to
+ do their job properly. Programming languages have the opposite problem in
+ that they&rsquo;re excellent for computers, but it&rsquo;s difficult for humans to
+ discern the larger picture from a body of code. Literate programming aims to
+ rectify this impedance mismatch by combining the two into a single body of
+ work. Knuth refers to this work as a <em>web</em>, and while he claims that he chose
+ this name in a quite informal manner, it&rsquo;s an incredibly apt name that has
+ subtle implications we&rsquo;ll explore in a moment. From a <em>web</em> you can use
+ a tool named <em>weave</em> to generate a file suitable for generating more
+ traditional documentation, and you can use the <em>tangle</em> tool to produce
+ a body of code suitable for compilation.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="k">def</span> <span class="nf">weave</span><span class="p">(</span><span class="n">web</span><span class="p">)</span>
+  <span class="vg">$stdout</span><span class="o">.</span><span class="n">puts</span> <span class="n">format_documentation</span><span class="p">(</span><span class="n">web</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nf">tangle</span><span class="p">(</span><span class="n">web</span><span class="p">)</span>
+  <span class="vg">$stdout</span><span class="o">.</span><span class="n">puts</span> <span class="n">format_output_code</span><span class="p">(</span><span class="n">web</span><span class="p">)</span>
+<span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-27'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-27">#</a>
+        </div>
+        <p> Earlier, I mentioned that literate programming is more than simply extracting
+ comments. The important thing that Docco is missing are <em>macros</em>. Literate
+ programming macros are similar to the concept of macros in other languages;
+ they are simply a name that&rsquo;s given to a piece of code, such that it can be
+ substituted by the preprocessor. The reason macros are important is that
+ allows code to be declared out of the order that the computer requires, and
+ in the order that the person reading it wants.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-28'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-28">#</a>
+        </div>
+        <p> For example, if you were to run this code:</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="n">calculate</span> <span class="n">user_input</span>
+
+<span class="n">user_input</span> <span class="o">=</span> <span class="vg">$stdin</span><span class="o">.</span><span class="n">gets</span>
+
+<span class="k">def</span> <span class="nf">calculate</span> <span class="n">x</span>
+  <span class="n">x</span> <span class="o">+</span> <span class="mi">2</span>
+<span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-29'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-29">#</a>
+        </div>
+        <p> you would generate an error. You need to define the <code>calculate</code> method before
+ you used it, and the same with <code>user_input</code>. It&rsquo;s all out of order! But maybe
+ this way makes the most sense when we&rsquo;re trying to explain the program.
+ Macros would allow us to say something like:</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-30'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-30">#</a>
+        </div>
+        <hr />
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-31'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-31">#</a>
+        </div>
+        <pre><code> The program will execute these steps in order:
+
+ * &lt;Get input from the user 2&gt;
+ * &lt;Define a calculation function 3&gt;
+ * &lt;Calculate a value from the input 1&gt;
+</code></pre>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-32'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-32">#</a>
+        </div>
+        <pre><code> The meat of the program is in the calculation on the user input. Since it's
+ the main thing we're trying to do, it's simple: just one line:
+ &lt;1&gt;
+ calculate user_input
+</code></pre>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-33'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-33">#</a>
+        </div>
+        <hr />
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-34'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-34">#</a>
+        </div>
+        <p> And so on. We could then explain each section in the order we want, and our
+ <em>tangle</em> program will re-arrange them into the order that the computer needs.
+ Knuth considered this incredibly important, enough that systems that don&rsquo;t
+ have this ability would not actually be called literate systems.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-35'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-35">#</a>
+        </div>
+        <h2>Code as a web.</h2>
+
+<p> At first glance, a simple ordering of code seems to be a quite minor feature.
+ However, it represents a deeper structural difference between the way that we
+ understand concepts and the way that a computer does; the human mind tends to
+ think of things as an interconnected network of concepts, and a computer
+ only understands ordered lists of commands. This relationship is one of the
+ fundamental leaks in the software abstraction.</p>
+
+<blockquote><p>I think that a complex piece of software is, indeed, best regarded as a web that has been delicately pieced together from simple materials. We understand a complicated system by understanding its simple parts, and by understanding the simple relations between those parts and their immediate neighbors. If we express a program as a web of ideas, we can emphasize its structural properties in a natural and satisfying way.</p></blockquote>
+
+<p> Trading off understanding simply to make it easier for a computer to
+ interpret our program makes no sense; man has mastery over machine. It&rsquo;s hard
+ enough to create reliable programs without artificial impediments in our way!
+ This is a major structural shift, and dramatically increases our ability to
+ express what we want a program to do, rather than simply describe how the
+ computer understands our source code.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-36'>
+      <td class=docs>
+        <div class="octowrap">
+          <a class="octothorpe" href="#section-36">#</a>
+        </div>
+        <h2>So is all of this worth it?</h2>
+
+<p> Knuth seems to think so:</p>
+
+<blockquote><p>Programming is a very personal activity, so I can&rsquo;t be certain that what
+ has worked for me will work for everybody. Yet the impact of this new
+ approach on my own style has been profound, and my excitement has continued
+ unabated for more than two years. I enjoy the new methodology so much that it
+ is hard for me to refrain from going back to every program that I&rsquo;ve ever
+ written and recasting it in &ldquo;literate&rdquo; form.</p></blockquote>
+
+<p> Time will tell. I know that I&rsquo;ve been searching for a better way to blend
+ documentation and code together, and it seems like tools such as Docco are
+ almost there. I&rsquo;ve already converted the Hackety Hack website over to Docco,
+ and I&rsquo;ve enjoyed it a lot. I&rsquo;m not 100% convinced that it&rsquo;s the best
+ solution that exists, but it sounds appealing, and my results have been good
+ so far.</p>
+
+<p> If you have significant experience programming in a literate style, I&rsquo;d love
+ to <a href="http://timeless.judofyr.net/comments">hear from you</a>. Also, there is
+ a small chance that I&rsquo;d like to build a macro system on top of Docco, so if
+ that interests you, please get in touch and we can talk about it.</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>
