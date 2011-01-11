@@ -23,35 +23,40 @@ module Timeless::Models
       raise NotFound unless exists?
     end
 
-    def to_param; @name end
+    def url
+      if entry? and link = self[:link]
+        link
+      else
+        "/#{@name}"
+      end
+    end
+        
     def <=>(o);   title <=> o.title end
     def filename; "content/#{@name}" end
     def file?;    @name.include?(".") end
+    def entry?;   not file? end
     def exists?;  File.exists?(filename) end
+    def [](key); maruku.get_setting(key) end
   
     def to_html
       file? ? content : (@html ||= maruku.to_html)
     end
   
     def title
-      file? ? @name : maruku.get_setting(:title) || @name
+      file? ? @name : self[:title] || @name
     end
 
     def subtitle
-      file? ? "" : maruku.get_setting(:subtitle) || ""
+      file? ? "" : self[:subtitle] || ""
     end
     
     def author
-      maruku.get_setting(:author) unless file?
+      self[:author] unless file?
     end
     
     def last_updated
-      if defined?(@last_updated)
-        @last_updated
-      else
-        str = maruku.get_setting(:last_updated)
-        @last_updated = Time.parse(str)
-      end
+      str = self[:last_updated]
+      str && Time.parse(str)
     end
 
     def to_snip

@@ -80,7 +80,7 @@ module Timeless::Controllers
       @change = Change.new(id)
       case @change.type
       when :entry
-        redirect(Entry, @change.entry)
+        redirect(@change.url)
       when :text
         render :layout, :layout => false do
           render :_change, :locals => { :change => @change }

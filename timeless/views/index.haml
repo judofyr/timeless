@@ -21,7 +21,7 @@
       %ul
         - entries.each do |entry|
           %li
-            %a{:href => R(Entry, entry)}
+            %a{:href => entry.url}
               = entry.title
               %p= entry.subtitle
   %div(style="clear:both")

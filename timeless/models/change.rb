@@ -2,6 +2,7 @@ module Timeless::Models
   class Change
     CONTINUE = '<p><a href="%s">Continue to full post.</a></p>'
     UPDATED = CONTINUE.sub('full', 'updated')
+    
     ALL = Dir["changes/*.yaml"].map { |x| x[/\d+/].to_i }.sort
     LAST = ALL.last
 
@@ -54,14 +55,18 @@ module Timeless::Models
         content["title"]
       end
     end
-
+    
+    # Returns a full HTML which can be included in i.e. a feed.
     def to_full_html
       case type
       when :entry
-        entry.to_html
-      when :update
-        to_html
-      when :text
+        if entry[:link]
+          # It's actually a link, so we want "Continue to"
+          to_html
+        else
+          entry.to_html
+        end
+      else
         to_html
       end
     end
@@ -78,14 +83,18 @@ module Timeless::Models
     end
     
     def full_url
-      "http://timeless.judofyr.net#{url}"
+      if url[0] == ?/
+        "http://timeless.judofyr.net#{url}"
+      else
+        url
+      end
     end
 
     def url
       if type == :text
         "/changelog/#{@id}"
       else
-        "/#{entry.name}"
+        entry.url
       end
     end
 

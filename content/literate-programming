@@ -1,0 +1,10 @@
+Title: Literate Programming
+Subtitle: Foobar
+Link: http://timeless.judofyr.net/literate-programming.html
+
+*Literate programming* is an interesting concept that Don Knuth described in
+1984, as an alternate way to write software. Literate programming places
+emphasis on the way that people think about software, rather than the way
+that computers do. Rather than write code in an order that's imposed by the
+compiler, the literate programmer writes in words the way he expects a
+program to work, and then intersperses his description with code.
