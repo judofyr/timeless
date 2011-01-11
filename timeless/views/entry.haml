@@ -1,4 +1,9 @@
 %header
   %h1= @entry.title
-  
+  %p
+    - if @entry.author
+      Written by #{@entry.author}. 
+    - if @entry.last_updated
+      Last updated in #{@entry.last_updated.strftime("%B %Y")}. 
+    
 %p!= @entry.to_html

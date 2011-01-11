@@ -40,6 +40,19 @@ module Timeless::Models
     def subtitle
       file? ? "" : maruku.get_setting(:subtitle) || ""
     end
+    
+    def author
+      maruku.get_setting(:author) unless file?
+    end
+    
+    def last_updated
+      if defined?(@last_updated)
+        @last_updated
+      else
+        str = maruku.get_setting(:last_updated)
+        @last_updated = Time.parse(str)
+      end
+    end
 
     def to_snip
       Maruku.new(content(true)).to_html

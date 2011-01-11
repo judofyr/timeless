@@ -16,9 +16,12 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.2;
 }
 
+header {
+  margin-bottom: 20px;
+}
+
 h1 {
   font-size: 36px;
-  margin-bottom: 20px;
 }
 
 p, ul, ol, pre, hr {
@@ -111,6 +114,10 @@ h1 a:hover {
 
 h1 strong {
   color: #A40802;
+}
+
+header p {
+  color: #999;
 }
 
 /* ARTICLE */
