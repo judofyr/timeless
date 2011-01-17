@@ -1,0 +1,74 @@
+Title: Your blog is a project
+Subtitle: .. so why don't you treat it like one?
+
+Maintaining a blog is surprisingly more difficult than you would imagine. The
+concept is so simple that anyone instantly understands it. The software has
+become so easy to work with that anyone can start one in a few minutes.
+*Starting* a blog has never been easier, yet keeping it updated still remains
+a most demanding task.
+
+The truth is that blogging is often more about structuring and organizing
+than actual *writing*. Well, guess what? Successful software development is
+*also* often more about structuring and organizing than actual writing, so
+why not apply the same tools to your blog as to any other project?
+
+(snip)
+
+## Deadlines, or: Learn to ship
+
+Who doesn't hate deadlines? Who doesn't want to continually work on something
+until it's absolutely perfect and then release it to the world? Deadlines are
+often despised because estimation is never perfect and nobody enjoy pressure,
+but truth is that pressure is often *required* to get anything done.
+Especially when it comes to situations where no one will complain if you
+don't get anything done (a new blog, startup or open-source project).
+
+Don't say "I'm going to blog when I have something interesting to tell", say
+"I'm going to blog something each Sunday". The implication of this is that
+you'll have to **find something interesting to tell every week**. Of course,
+this is only a soft deadline: there will be no real consequences for *not*
+holding the deadline, but it will turn your blog from a passive project into
+an active project which brings it into a whole new level.
+
+Another consequence of setting deadlines (and sticking to them) is that
+you'll force yourself to ship. It's so tempting to try turn every blog post
+into a masterpiece, but far to often you get a better result by simply
+publishing and take feedback from there.
+
+Force yourself out of your comfort zone and start *publishing!*
+
+> Move out of your comfort zone. You can only grow if you are willing to
+> feel awkward and uncomfortable when you try something new.
+> 
+> --- Brian Tracy
+
+## Issue tracker, or: Nobody's perfect
+
+Software is rarely perfect, and in order to fix bugs you must first identify
+and organize them. Issue trackers are an important part of any project, so
+why not use it for your blog too? You just got an idea for something to write
+about? Sounds like a feature request to me. The RSS feed isn't working
+correctly? Sounds like a bug. Don't just make mental notes about your blog,
+treat it right a proper project.
+
+Here at Timeless we have [an issue tracker][issues] with tons of "reported"
+issues. It's a simple place where I can quickly scribble down new ideas or
+just organize known "bugs". Every time I go into "blog mode" I take a look at
+that huge list, and I always discover something new. For instance, I had no
+idea I was going to write this article until I peeked at the issue list and
+thought: "Yep, today I want to write about how you should treat your blog."
+
+An issue tracker is no different than a simple to-do list, so feel free to
+use whatever suits you best, but the important part is to actually **write
+things down** and don't keep everything in your mind.
+
+## But wait, there's more!
+
+Not really. There isn't more in this article yet. Why? Because I've already
+passed my deadline and I *really* need to get this article published. Instead
+of listening to the perfectionist inside of me, I'm just going to ship this
+little piece of text and rather work on it later.
+
+As always, please [let me know](/comments) what you think about this idea.
+
+[issues]: http://github.com/judofyr/timeless/issues
