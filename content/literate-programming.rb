@@ -1,6 +1,6 @@
 # *Literate programming* is a method of crafting software that Don Knuth described in 1984 in his paper [Literate Programming](http://www.literateprogramming.com/knuthweb.pdf). A literate program places emphasis on the way that people understand the problem a particular piece of software is attempting to solve, rather than the way that computers interpret the source code.
 #
-# This is an example of literate programming using [Rocco](https://github.com/rtomayko/rocco). This `literate-programming.html` file is the output of running `rocco content/literate-programming.rb` from the root directory of the [Timeless source code](https://github.com/judofyr/timeless). You can also view [literate-programming.rb](/literate-programming.rb) directly.
+# This is an example of literate-style programming using [Rocco](https://github.com/rtomayko/rocco). This `literate-programming.html` file is the output of running `rocco content/literate-programming.rb` from the root directory of the [Timeless source code](https://github.com/judofyr/timeless). You can also view [literate-programming.rb](/literate-programming.rb) directly.
 #
 # If you've been linked here from somewhere external, this article is part of
 # [Timeless](http://timeless.judofyr.net). Since this page was generated with
