@@ -1,5 +1,6 @@
 Title: BDD with Rspec and Steak
 Subtitle: Tasty Testing Terminology
+Author: Steve Klabnik
 
 Behavior Driven Development is a test-first software development methodology. It's a fairly straightforward process if you're familiar with other agile development methodologies. (snip) Here's a general outline of how software is developed with BDD:
 
