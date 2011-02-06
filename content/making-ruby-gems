@@ -1,0 +1,114 @@
+Title: Making Ruby Gems
+Subtitle: It's super easy!
+Author: Steve Klabnik
+
+One of my favorite aspects of the Ruby community is its strong commitment to Open Source. Thousands of Rubyists have written great libraries and placed the code up on GitHub (or elsewhere on the Internet) for everyone to use. Ruby has a fantastic tool to distribute these libraries: RubyGems. One of the reasons that Open Source runs so strong through Ruby's veins is how easy it is to share your code.
+
+While making a gem is really easy, there are a few additional concens that you should be aware of when you distribute your code as a gem. Here's an example of building a simple Gem, with some notes on best practices along the way.
+
+(snip)
+
+## The structure of a gem
+
+At its core, a gem consists of two things: some _code_, and a _gemspec_. The gemspec file defines a `Gem::Specification` object, which is used by `rubygems` to handle the management of your code. That's it! Nothing complicated. However, there are some conventions that virtually all gems follow that will help you out.
+
+Most gems have a directory structure that looks like this:
+
+    $ tree -d mygem
+    |-- lib/
+    |   |-- mygem.rb
+    |   `-- mygem/
+    |       |-- base.rb
+    |       `-- version.rb
+    |-- test/
+    |-- bin/
+    |-- Rakefile
+    `-- mygem.gemspec
+
+All of the code for the gem goes under the `lib` directory. This directory is what gets added to your $LOAD_PATH, and so `lib` usually contains two things: mygem.rb and a directory named mygem. mygem.rb will look like this:
+
+    require 'mygem/base'
+{: lang=ruby }
+
+If there were more files in `lib/mygem`, they'd be `require`d here, too. This is done so that you can break up your project into however many files you'd like, and name them whatever you want, and nobody will tramp on each others' toes. Think about it: if I have two gems installed, and both of them have their `lib` directories included, and they both name a file `json.rb`, which one is going to be loaded? It causes problems. So just follow this structure, and everything will work out.
+
+The `version.rb` file looks like this:
+
+    module Mygem
+      VERSION = "0.0.1"
+    end
+{: lang=ruby }
+
+This constant will be used in our gemspec. It's nice to have it in a separate file, so that we can easily find and increment it when releasing a new version of the gem.
+
+I'm sure that you can guess what goes in the `test` directory: your unit tests! You do have those, right? We'll talk more about this later.
+
+The `bin` directory holds any binaries that we want to distribute with our gem. Calling them 'binaries' is sort of a misnomer, though: these are almost always just Ruby scripts, starting off with a 'shebang line`:
+
+    #!/usr/bin/env ruby
+
+    begin
+      require 'mygem'
+    rescue LoadError
+      require 'rubygems'
+      require 'mygem'
+    end
+
+    #more code goes here
+{: lang=ruby }
+
+This is a patten you'll often see in gems that also give you scripts to run. Why the `begin`/`rescue`/`end`? Well, ['require "rubygems" is wrong'](http://tomayko.com/writings/require-rubygems-antipattern). Basically, someone may be using something other than rubygems to manage their path, and so you shouldn't trample on their toes. But if you can't find your gem, then giving it a second shot with Rubygems is better than crashing.
+
+## The Gemspec
+
+Here's a sample gemspec: 
+
+    # -*- encoding: utf-8 -*-
+    $:.push File.expand_path("../lib", __FILE__)
+    require "mygem/version"
+
+    Gem::Specification.new do |s|
+      s.name        = "mygem"
+      s.version     = Mygem::VERSION
+      s.platform    = Gem::Platform::RUBY
+      s.authors     = ["Steve Klabnik"]
+      s.email       = ["steve@steveklabnik.com"]
+      s.homepage    = ""
+      s.summary     = %q{A sample gem}
+      s.description = %q{A sample gem. It doesn't do a whole lot, but it's still useful.}
+
+      s.add_dependency "launchy"
+      s.add_development_dependency "rspec", "~>2.5.0"
+
+      s.files         = `git ls-files`.split("\n")
+      s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
+      s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+      s.require_paths = ["lib"]
+    end
+{: lang=ruby }
+
+As you can see, it uses the standard 'pass a block to new' DSL convention to build up all of the information about our Gem. Most of it is pretty self-explanatory, but there are a few interesting parts: You can see we used the Mygem::VERSION constant we defined earlier to set our version. We use `git` to list all of the files in our project, as well as our test files and executables. The 'add dependency' lines tell `rubygems` what other gems we'll need to install, if the user doesn't have them already.
+
+## Tools to build tools
+
+Because gems follow these conventions, there are a bunch of different gems that can help you make gems, like [hoe](http://seattlerb.rubyforge.org/hoe/) or [jeweler](https://github.com/technicalpickles/jeweler). My favorite is a one-two punch with `rvm` and bundler.
+
+If you're not using [rvm](http://rvm.beginrescueend.com/) already, you should. rvm is wonderful for a few reasons, but when you're making a gem, rvm's [gemsets](http://rvm.beginrescueend.com/gemsets/) feature allow you to develop your gems in a cleanroom environment. This is nice for two reasons: you can verify that you have all of your dependencies configured properly, and you won't pollute your regular Ruby setup with your undoubtedly half-broken under-development versions of your own gems.
+
+Bundler is great for managing depedancies of gems in your applications, but it also includes two cool tools to help you make gems: `bundle gem <gemname>` will create a gem skeleton, and that skeleton is set up with a few `rake` tasks to make your development of gems nice and simple. The bundler skeleton sets up all of those directories I showed you above, as well as giving you a Gemfile, a `git` repository, and a .gitignore file. The three `rake` tasks bunlder installs are 'build,' 'install,' and 'release.' 'build' builds your gem into a .gem, 'install' installs that gem into your current Ruby, and 'release' will tag your release, push it to GitHub, and then push your gem to rubygems.org. Super simple.
+
+## An example
+
+I gave a lightning talk at [pghrb](http://pghrb.org/) recently, and actually live-coded a gem while explaining this stuff. The resulting gem, which simply opens my presentation in a web browser, is on GitHub. It's called [teachmehowtomakearubygem](https://github.com/steveklabnik/teachmehowtomakearubygem), and you can get it with `gem install teachmehowtomakearubygem`. I'm still revising the presentation to read better; I didn't want to present a giant wall of text, but this article is much easier to read than the presentation is. Still, all of the example code is there.
+
+## Testing your Gem
+
+If you set up your Rakefile to run your tests with `rake test`, you can take advantage of a really neat new project: [gem-testers](http://gem-testers.org/). The only other thing you need to do is add an empty `.gemtest` file to your project, and gem-testers will pick it up. Once enabled, your gem's tests will be run on a variety of machines by a bunch of different people. This project is just getting underway, but similar efforts have provided a great benefit to people who write Perl libraries. Don't have a Mac, but want to test your gem out on x86_64/darwin? gem-testers to the rescue!
+
+## A note on versioning
+
+Try to follow [semantic versioning](http://semver.org/) when releasing your gems. This makes it much easier for people using your gem to use things like '~>' when specifying the version they'd like to use, and not have to worry too much about API breakage. A little bit of work by everyone to follow conventions goes a long way.
+
+## Even further: C extensions
+
+I don't have much experience creating gems with C extensions, so if you have any best practices to share, please [get in touch](http://timeless.judofyr.net/comments) and share them.
