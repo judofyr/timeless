@@ -1,5 +1,6 @@
 Title: Tailin' Ruby
 Subtitle: Implementing tail call optimizations in Ruby
+Author: judofyr
 
 Ruby doesn't implement [tail call optimization][tail-call], so a while ago I
 tried to figure out how I could fake it:

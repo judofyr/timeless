@@ -1,4 +1,5 @@
 Title: When in Doubt, Turn to _why
+Author: judofyr
 
 For a long time, [Rack couldn't parse nested hash params][nested-fail].
 That's  was pretty annoying, so until they decided how to implement it in

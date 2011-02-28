@@ -1,5 +1,6 @@
 Title: Block Helpers in Rails 3
 Subtitle: Wherein Rails add their own ERB syntax
+Author: judofyr
 
 In May 2010 I attended [Frozen Rails][frozenrails] in Helsinki where Carl
 Lerche held a talk about Rails 3. Like everything else regarding Rails 3

@@ -1,5 +1,6 @@
 Title: Morse
 Subtitle: Morse code encoder/decoder in Ruby
+Author: judofyr
 HTML use syntax: true
 
 Some of you might have noticed my [little attempt on refactoring][refmycode].

@@ -1,5 +1,6 @@
 Title: SuperIO
 Subtitle: Convert everything to an IO
+Author: judofyr
 
     require 'open-uri'
     require 'stringio'

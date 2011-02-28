@@ -1,4 +1,5 @@
 Title: Use the Gemspec
+Author: judofyr
 
 You can say a lot about GitHub's [previous gem hosting][gh-gem], but at
 least it helped us understanding one thing: the value of a gemspec. The

@@ -1,5 +1,6 @@
 Title: Charging Objects in Ruby
 Subtitle: Positive, negative and whatnot
+Author: judofyr
 
 Today we'll explore a not so widely used feature in Ruby: overriding the the
 unary operators for fun and profit:

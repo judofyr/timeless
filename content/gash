@@ -1,5 +1,6 @@
 Title: Gash
 Subtitle: Access a Git repo as a Hash
+Author: judofyr
 
 
     sudo gem install gash

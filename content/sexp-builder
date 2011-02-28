@@ -1,5 +1,6 @@
 Title: SexpBuilder
 Subtitle: Easily process and rewrite S-expressions using SexpPath
+Author: judofyr
 
 *NOTE: In this post I use the term "S-expression" and "Sexp" quite a lot. If
 you're not quite sure what they mean, check out [Sexp for

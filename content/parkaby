@@ -1,5 +1,6 @@
 Title: Parkaby
 Subtitle: Super fast experimental Markaby replacement
+Author: judofyr
 
     Parkaby {
       html {

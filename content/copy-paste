@@ -1,5 +1,6 @@
 Title: Copy Paste
 Subtitle: Access the clipboard in IRB
+Author: judofyr
 HTML use syntax: true
 
 Stick this in your .irbrc:

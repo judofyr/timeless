@@ -2,7 +2,8 @@
   %h1= @entry.title
   %p
     - if @entry.author
-      Written by #{@entry.author}. 
+      Written by <a href="#{@entry.author[:site]}">
+      \ #{@entry.author[:name]}</a>.
     - if @entry.last_updated
       Last updated in #{@entry.last_updated.strftime("%B %Y")}. 
     

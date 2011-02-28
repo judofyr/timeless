@@ -1,5 +1,6 @@
 Title: Haters gonna HATEOAS
 Subtitle: Some details about REST
+Author: steveklabnik
 
 Every time someone mentions RESTful web services, there's always that one person that has to chime in: "That's not _really_ RESTful, it's just kinda RESTful." I'd always filed that information away, under 'things to learn later,' and let it simmer in the back of my brain. I've finally looked into it, and they're absolutely right: 99.99% of the RESTful APIs out there aren't fully compliant with Roy Fielding's conception of REST. Is that bad?
 

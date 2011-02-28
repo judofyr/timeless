@@ -51,7 +51,7 @@ module Timeless::Models
     end
     
     def author
-      self[:author] unless file?
+      Timeless::Authors[self[:author]] unless file?
     end
     
     def last_updated

@@ -33,6 +33,18 @@ module Timeless
     :escape_html => true,
     :ugly => true
   }
+  
+  Authors = {
+    'judofyr' => {
+      :name => 'Magnus Holm',
+      :site => 'http://judofyr.net/'
+    },
+    
+    'steveklabnik' => {
+      :name => 'Steve Klabnik',
+      :site => 'http://steveklabnik.com/'
+    }
+  }
 
   def service(*a)
     if last = @env['HTTP_LAST_MODIFIED_SINCE'] and

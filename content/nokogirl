@@ -1,5 +1,6 @@
 Title: Nokogirl
 Subtitle: Because programmers can't splell
+Author: judofyr
 
 Every time I play with [Nokogiri][nokogiri], I get this weird error:
 

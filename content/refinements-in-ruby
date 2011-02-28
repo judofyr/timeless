@@ -1,5 +1,6 @@
 Title: Refinements in Ruby
 Subtitle: Monkey patching for friendly monkeys
+Author: judofyr
 HTML use syntax: true
 
 At RubyConf 2010 Shugo Maeda [talked about *Refinements*][rc-talk]: A proposal
