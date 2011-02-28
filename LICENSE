@@ -1,4 +1,4 @@
-Copyright (c) 2010 Magnus Holm <judofyr@gmail.com>
+Copyright (c) 2011 Magnus Holm <judofyr@gmail.com>
 
 Timeless is free software, released under an MIT license (attached below).
 However, this package contains several files which are used by Timeless, but
@@ -8,7 +8,8 @@ not a part of it:
 * Everything under the timeless/views/ directory
 * The public/style.css file
 
-All rights are reserved for these files.
+These files are licensed under Attribution-ShareAlike 3.0:
+http://creativecommons.org/licenses/by-sa/3.0/
 
 ---
 
@@ -28,4 +29,3 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
 ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
