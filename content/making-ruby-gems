@@ -43,7 +43,7 @@ This constant will be used in our gemspec. It's nice to have it in a separate fi
 
 I'm sure that you can guess what goes in the `test` directory: your unit tests! You do have those, right? We'll talk more about this later.
 
-The `bin` directory holds any binaries that we want to distribute with our gem. Calling them 'binaries' is sort of a misnomer, though: these are almost always just Ruby scripts, starting off with a 'shebang line`:
+The `bin` directory holds any binaries that we want to distribute with our gem. Calling them 'binaries' is sort of a misnomer, though: these are almost always just Ruby scripts, starting off with a 'shebang line':
 
     #!/usr/bin/env ruby
 
