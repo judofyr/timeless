@@ -12,7 +12,7 @@ Well, not ERB-the-syntax, but ERB-the-concept:
 > 
 > * Static text
 > * Dynamic text (pieces of Ruby which are evaluated and sent to the client)
-> * Blocks (pieces of Ruby which are evaluated and _not_ sent to the
+> * Codes (pieces of Ruby which are evaluated and _not_ sent to the
 >   client, but might change the control flow).
 
 Nothing revolutionary at all. Just a theory.
@@ -78,16 +78,16 @@ they don't even compile it at all.
      [:static, "Hello "],
      [:dynamic, "@world"],
      [:static, "!\n"],
-     [:block, "if @me.happy?"],
+     [:code, "if @me.happy?"],
      [:static, "\n  "],
      [:dynamic, "@greeting"],
      [:static, "\n"],
-     [:block, "end"]]
+     [:code, "end"]]
 {: lang=ruby }
 
 Then let Temple take over. You could use Temple::Filters::DynamicInliner to
 optimize sequential statics/dynamics into a single dynamic.
-Temple::Filters::Escapable handles escaping, and Temple::Core::ArrayBuffer
+Temple::Filters::Escapable handles escaping, and Temple::Generators::ArrayBuffer
 generates the Ruby code.
 
 The idea is to build an engine based on a chain of compilers. A compiler is
@@ -101,7 +101,7 @@ Very much like you have middlewares in Rack, you use compilers in Temple
     class ERBEngine < Temple::Engine
       use Temple::Parsers::ERB
       use Temple::Filters::DynamicInliner
-      use Temple::Core::ArrayBuffer
+      use Temple::Generators::ArrayBuffer
     end  
 {: lang=ruby }
 
@@ -126,7 +126,7 @@ A dead simple ERB parser could look like this:
             head = :dynamic
           else
             text = $1
-            head = :block
+            head = :code
           end
           result << [head, text]
           src = $'
@@ -201,13 +201,13 @@ Generators, just like parsers, are dumb too. Here's the ArrayBuffer:
         buffer " << (#{code})\n"
       end
       
-      def on_block(code)
+      def on_code(code)
         code + "\n"
       end
     end
 {: lang=ruby }
 
-Temple includes Array, StringBuffer and Interpolation too, even though the last one works kinda funky with blocks and currently only works as expected with Mustache.
+Temple includes Array and StringBuffer too.
 
 ## Engines
 
