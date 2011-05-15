@@ -1,0 +1,104 @@
+Title: JSON: The JavaScript subset that isn't
+Author: judofyr
+
+From Wikipedia's article on [JSON](http://en.wikipedia.org/wiki/JSON)
+
+> JSON was based on a subset of the JavaScript scripting language.
+>
+> All JSON-formatted text is also syntactically legal JavaScript code.
+> 
+> JSON is a subset of JavaScript.
+
+All these years we've heard it over and over again: "JSON is a
+JavaScript subset". Guess what? They're wrong. Wrong, wrong, wrong. You
+see, the devil's in the details, and there's no way to avoid it: Not
+*all* JSON-formatted text is legal JavaScript code:
+
+    {"JSON":"ro cks!"}
+
+(snip)
+
+Copy the *exact* code above and paste it into Firebug or the Web Inspector:
+
+![JSON sucks](http://stuff.judofyr.net/json/json-sucks.png)
+
+Wait, what? `SyntaxError: Unexpected token :`? That doesn't make any sense!
+It's just a regular object literal, how can *that* be a SyntaxError?
+
+Try the same code in a proper JSON parser. No problems at all.
+
+Of course it's not *just* a regular object literal. There's a sneaky little
+Unicode character in there too: Right between "ro" and "cks!" there's a tiny
+**U+2028**. Your browser probably doesn't display it because it's whitespace:
+[LINE SEPARATOR][u2028], but it's still there. If you replace the character
+with a U+2029 ([PARAGRAPH SEPARATOR][u2029]) you would have the exact same
+issue.
+
+## JSON + U+2028 = ☺
+
+According to the JSON specification, you can safely use this character in any
+string. It's not a quote, not a backslash, and not a *control character*.  It's
+just a weird Unicode whitespace character:
+
+![JSON string specification](http://json.org/string.gif)
+
+## JavaScript + U+2028 = ☹
+
+ECMA-262 (the standard that JavaScript is based on) on the other hand defines
+strings a little differently: According to [7.8.4 String Literals][strlit], a
+string can contain anything as long as it's not a quote, a backslash or a
+*line terminator*:
+
+    DoubleStringCharacter ::
+        SourceCharacter but not double-quote " or backslash \ or LineTerminator 
+        \ EscapeSequence
+
+    SingleStringCharacter ::
+        SourceCharacter but not single-quote ' or backslash \ or LineTerminator 
+        \ EscapeSequence
+
+And what is a line terminator? Let's have a look at [7.3 Line
+Terminators][lineterm]:
+
+> The following characters are consider to be line terminators:
+> 
+> * `\u000A` - Line Feed
+> * `\u000D` - Carriage Return
+> * `\u2028` - Line separator
+> * `\u2029` - Paragraph separator
+
+Ouch.
+
+No string in JavaScript can contain a literal U+2028 or a U+2029.
+
+## So what?
+
+Because of these two invisible Unicode characters, JSON is **not** a subset of
+JavaScript. Close, but no cigar.
+
+In most applications, you won't notice this issue. First of all, the line
+separator and the paragraph separator isn't exactly widely used. Secondly, any
+*proper* JSON parser will have no problems with parsing it.
+
+However, when you're dealing with [JSONP][jsonp] there's no way around: You're
+forced to use the JavaScript parser in the browser. And if you're sending data
+that other have entered, a tiny U+2028 or U+2029 might sneak in and break your
+pretty cross-domain API.
+
+## The solution
+
+Luckily, the solution is simple: If we look at the JSON specification we see
+that the *only* place where a U+2028 or U+2029 can occur is in a string.
+Therefore we can simply replace every U+2028 with `\u2028` (the escape
+sequence) and U+2029 with `\u2029` whenever we need to send out some JSONP.
+
+It's already been [fixed in Rack::JSONP][jsonp-win] and I encourage all
+frameworks or libraries that send out JSONP to do the same. It's a one-line
+patch in most languages and the result is still 100% valid JSON.
+
+[u2028]: http://www.fileformat.info/info/unicode/char/2028/index.htm
+[u2029]: http://www.fileformat.info/info/unicode/char/2029/index.htm
+[strlit]: http://bclary.com/2004/11/07/#a-7.8.4
+[lineterm]: http://bclary.com/2004/11/07/#a-7.3
+[jsonp]: http://en.wikipedia.org/wiki/JSONP
+[jsonp-win]: https://github.com/rack/rack-contrib/pull/37
