@@ -18,12 +18,14 @@ see, the devil's in the details, and there's no way to avoid it: Not
 
 (snip)
 
-Copy the *exact* code above and paste it into Firebug or the Web Inspector:
+Copy the *exact* code above and paste it into Firebug or the Web Inspector
+within a pair of parentheses (required to avoid an ambiguity in JavaScript's
+syntax):
 
 ![JSON sucks](http://stuff.judofyr.net/json/json-sucks.png)
 
-Wait, what? `SyntaxError: Unexpected token :`? That doesn't make any sense!
-It's just a regular object literal, how can *that* be a SyntaxError?
+Wait, what? `SyntaxError: Unexpected token ILLEGAL`? That doesn't make any
+sense! It's just a regular object literal, how can *that* be a SyntaxError?
 
 Try the same code in a proper JSON parser. No problems at all.
 
