@@ -42,7 +42,7 @@ According to the JSON specification, you can safely use this character in any
 string. It's not a quote, not a backslash, and not a *control character*.  It's
 just a weird Unicode whitespace character:
 
-![JSON string specification](http://json.org/string.gif)
+![JSON string specification](http://stuff.judofyr.net/json/json-string.gif)
 
 ## JavaScript + U+2028 = ☹
 
