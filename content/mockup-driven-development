@@ -12,7 +12,7 @@ Mockup-Driven Development attempts to merge the last two in order to make it
 easier to **build**, **maintain** and **experiment** with your application.
 Let's have a look at some of the real issues present in today's workflow and
 how MDD tries to solve them. We'll also check out the current
-implementations, what issues they have and how why can improve them.
+implementations, what issues they have and how we can improve them.
 
 (snip)
 
