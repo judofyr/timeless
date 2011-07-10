@@ -132,7 +132,7 @@ module Timeless::Helpers
   def main_class; false end
 
   def entry_index
-    entries = Timeless::Models::Entry.all.reject { |e| e.file? }
+    entries = Timeless::Models::Entry.all.reject { |e| e.file? or e[:index] == false }
     half = entries.size / 2
     [entries[0...half], entries[half..-1]]
   end
