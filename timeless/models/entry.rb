@@ -3,11 +3,19 @@ module Timeless::Models
     attr_reader :name
 
     def self.all
-      @all ||= entries.map { |name| new(name, true) }
+      @all ||= entries.map do |name|
+        begin
+          new(name, true)
+        rescue NotFound
+          nil
+        end
+      end.compact
     end
 
     def self.entries
-      Dir["content/**/*"].reject { |f| f =~ /~/ }.map { |f| f[/\/(.*)$/, 1] }.sort
+      Dir["content/**/*"].reject do |f|
+        f =~ /~/ or f.end_with?('/index')
+      end.map { |f| f[/\/(.*)$/, 1] }.sort
     end
 
     def self.new(name, force = false)
@@ -20,6 +28,7 @@ module Timeless::Models
 
     def initialize(name)
       @name = name
+      @file = name + '/index' if File.directory?("content/#{@name}")
       raise NotFound unless exists?
     end
 
@@ -32,11 +41,11 @@ module Timeless::Models
     end
         
     def <=>(o);   title <=> o.title end
-    def filename; "content/#{@name}" end
+    def filename; "content/#{@file || @name}" end
     def file?;    @name.include?(".") end
     def entry?;   not file? end
     def exists?;  File.exists?(filename) end
-    def [](key); maruku.get_setting(key) end
+    def [](key);  maruku.get_setting(key) end
   
     def to_html
       file? ? content : (@html ||= maruku.to_html)
