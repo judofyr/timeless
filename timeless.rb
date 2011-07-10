@@ -138,3 +138,10 @@ module Timeless::Helpers
   end
 end
 
+w = $stderr.method(:puts)
+(class << $stderr; self end).
+send(:define_method, :puts) do |*a|
+  # SHUT UP MARUKU!
+  w.call(*a) unless a.size > 0 && a.first =~ /Bug: /
+end
+
