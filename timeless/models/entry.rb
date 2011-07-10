@@ -7,7 +7,7 @@ module Timeless::Models
     end
 
     def self.entries
-      Dir["content/*"].reject { |f| f =~ /~/ }.map { |f| File.basename(f) }.sort
+      Dir["content/**/*"].reject { |f| f =~ /~/ }.map { |f| f[/\/(.*)$/, 1] }.sort
     end
 
     def self.new(name, force = false)
