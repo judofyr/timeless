@@ -1,0 +1,156 @@
+Title: Understanding Ruby: Objects and Classes
+Author: judofyr
+
+## Objects
+
+This is an object:
+
+![String Object](img/string-object.png)
+
+Every object in Ruby has these three crucial properties. You could say
+it's what *defines* an object in Ruby. In order to understand Ruby, we
+must first understand what these properties are and what purpose they
+serve.
+
+### Object ID
+
+An object has an *identity*. Without an identity, there's no way to tell
+different objects apart and no guarantee that they don't change behind
+our backs. Note that even if two objects are equal in all possible ways,
+it's not a guarantee that they have the same identity.
+
+You can get the object ID using `.object_id`:
+
+    123.object_id     # => 247
+    "Hello".object_id # => 2149275340 (or some other number)
+{: lang=ruby }
+
+You can check if two objects have the same identity using `.equal?`:
+
+    # Two different object that are similar:
+    "Hello".equal?("Hello") # => false
+{: lang=ruby }
+
+### Instance variables
+
+Every object is different (why else should we allocate objects?) and
+therefore each object contains different data. In Ruby, this data is
+stored in *instance variables* and backed by a hash table. This gives
+the object a great deal of flexibilty: instance variables don't have
+to be choosed at compile time, but can rather be introduced when
+needed.
+
+Inside an object, you can access the instance variables using `@name`
+and set them using `@name = value`. From the outside there's some other
+methods which can help you:
+
+    # Create a new object
+    obj = Object.new
+    obj.instance_variable_set(:@name, "Hello")
+    obj.instance_variable_get(:@name) # => "Hello"
+    obj.instance_variables            # => [:@name]
+{: lang=ruby }
+
+### Class pointer
+
+Finally, every object is an *instance* of a class. The class pointer
+defines what an object *is*. Usually we say that "(an object) is a
+(class)". In our case, we say that the object *is a* String. This is
+illustrated by a horizontal line in the diagram.
+
+It's important to remember that objects just *are* (and *store*), while
+it's classes that *do*. Without a class pointer, an object can't change
+itself and stops being an object; it's just data.
+
+What about String? What does String's class pointer point to? What *is*
+String? Well, String is a Class. And what is Class? Class is a Class.
+And so on. Observe that if we continue asking the question "what is", we
+will always end up at Class:
+
+![Class pointer chain](img/string-class-chain.png)
+
+## Classes
+
+We've all heard that in Ruby "everything is an object", so clearly all
+classes are objects too. But what other properties do classes have?
+Let's have a look!
+
+![String Class](img/string-class.png)
+
+## The Usual Stuff
+
+Like all objects, all classes have an identity, some instance variables
+and a class pointer. The class pointer *must* point to Class, because
+otherwise it's not a class (remeber that the class pointer defines what
+an object *is*).
+
+### Method table
+
+Because it's classes that actually *do stuff*, every class contains
+*methods* which are stored in a method table. 
+
+Inside a class you define a method using `def` or `define_method`:
+
+    class Hello
+      def a_method; code end
+      define_method(:a_method) { code }
+    end
+{: lang=ruby }
+
+You can list all methods using `.instance_methods`:
+
+    # Returns all methods defined in Hello only
+    Hello.instance_methods(false)
+    # Returns all methods defined in Hello and its superclasses
+    Hello.instance_methods
+
+### Superclass
+
+Every class is also a *subclass* of another class. The superclass
+property points to this class. Being a subclass means that "every
+instance of (this class) also happens to be a (superclass)". In our
+case, we can say that every instance of String (like our "Hello"-object)
+also happens to be an Object and a BasicObject.
+
+Another way of saying this is that "everything we can *do* with an
+instance of (the superclass) can also be done with an instance of (the
+subclass)".
+
+Notice that this makes our "is a"-notation much wider: `"Hello"` *is
+an* Object even though the class pointer points to String. Why? Because
+String is a subclass of Object.
+
+There's only *one* class which isn't a subclass of another class, and
+that's BasicObject. This is a class which contains the bare minimum of
+methods that needs to be defined. Use your knowledge from the previous
+section to find what these methods are.
+
+You can explore the superclass using `.superclass`:
+
+    String.superclass # => Object
+    Object.superclass # => BasicObject
+    BasicObject.superclass # => nil
+{: lang=ruby }
+
+*NOTE: In Ruby 1.8 (which is old and obsolete anyway) there's no
+BasicObject. Instead Object is at the top of the class hierachy and
+has no superclass.*
+
+## Calling methods
+
+## What about class methods?
+
+Draft note: This will essentially discuss metaclasses by asking the
+question "if methods are stored in classes, how can you define a
+method on one specific object".
+
+## What about modules?
+
+I've ignored modules in this part. Let's rather discuss them later.
+
+## Exercises
+
+Draft note: The gist of this section: Implement objects, classes and
+method lookup yourself (in Ruby). I'll provide a skeleton and a test
+suite.
+
