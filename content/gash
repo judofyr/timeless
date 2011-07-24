@@ -29,7 +29,7 @@ Author: judofyr
     wiki["Wiki"] = "Something everyone can edit."
 
     # And commit them.
-    wiki.commit("First verision")
+    wiki.commit("First version")
 
     # Now it exists!
     wiki.branch_exists? # => true
