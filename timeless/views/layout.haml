@@ -8,6 +8,11 @@
     Timeless
   /[if lt IE 9]
     %script(src="http://html5shim.googlecode.com/svn/trunk/html5.js")
+
+  %link{:rel => "alternate", :type => "application/atom+xml",
+    :href => "/changelog.xml", :title => "Atom Feed"}
+  %link{:rel => "feed", :type => "application/atom+xml",
+    :href => "/changelog.xml", :title => "Atom Feed"}
   %link{:rel => "stylesheet", :href => '/style.css'}
   :javascript
     var _gaq = _gaq || [];
