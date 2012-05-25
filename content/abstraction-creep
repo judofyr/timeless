@@ -110,14 +110,14 @@ Okay, so what's the real problem here?
 
 Controller tests are slow. Why?
 
-Because loading contollers are slow. Why?
+Because loading controllers are slow. Why?
 
 Because controllers are too complex.
 
 Why are controllers complex? A controller is rather simple:
 
 * It takes a request and an empty response
-* It let's you define actions which changes the response
+* It lets you define actions which changes the response
 * It defines some convenience methods
 
 These are the most important features. Let's write a very simple
@@ -186,9 +186,9 @@ what a controller is doing*. That doesn't mean they don't belong there,
 it just means you need to figure out if it's worth the added complexity.
 
 Does it belong another place? Maybe in the router (yes, there are
-frameworks that does the filtering in the router)? Somewhere else? I
-don't know. Maybe filters are lightweight and useful enough to take up
-some controller complexity.
+frameworks that do the filtering in the router)? Somewhere else? I don't
+know. Maybe filters are lightweight and useful enough to take up some
+controller complexity.
 
 And *this* is what we should focus on: Figuring out what belongs in te
 most basic classes in our framework. Not creating a horrible patchwork
