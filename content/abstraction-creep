@@ -112,7 +112,8 @@ Controller tests are slow. Why?
 
 Because loading controllers are slow. Why?
 
-Because controllers are too complex.
+Because controllers are too complex; they depend on too many different
+parts of Rails which needs to be loaded at startup.
 
 Why are controllers complex? A controller is rather simple:
 
