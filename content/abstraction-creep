@@ -233,7 +233,7 @@ And there's *nothing* about data that makes it complex. Data is really,
 really simple. There's only two things you need to do with data:
 
 1. You need to be able to combine data into one structure
-2. You need to be able to take apart the data again
+2. You need to be able to take the data apart again
 
 If you're not able to do those things easily, you've already lost the
 war. When the data is difficult to work with, you're forced to add
