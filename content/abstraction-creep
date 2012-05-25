@@ -268,7 +268,7 @@ it's too late. Or maybe the world changes in such way that it
 invalidates the abstraction.
 
 Rack is a typical example of an abstraction that hasn't handled change
-well. Rack is tries to abstract away HTTP in a simple and clear way.
+well. Rack tries to abstract away HTTP in a simple and clear way.
 When Rack was introduced in 2007, the web was pretty much stateless and
 every request expected an response as soon as possible. A synchronous
 interface makes sense:
@@ -280,9 +280,9 @@ interface makes sense:
 {: lang=ruby }
 
 The web has *changed*. Suddenly you have long-polling, where the request
-can wait for uptil 30 seconds before the server returns a response. We
-have WebSockets which completely breaks the stateless
-request/response-cycle. The requirements has changed.
+can wait for up to 30 seconds before the server returns a response. We
+have WebSocket which completely breaks the stateless
+request/response-cycle. The requirements have changed.
 
 Rack wasn't designed to handle these issues, so another abstraction was
 built on top:
