@@ -5,7 +5,7 @@ Author: judofyr
 Abstractions are very powerful when you're writing software. You don't
 want to write your web applications in assembly, or an operating system
 in JavaScript for that matter. Choosing the right abstraction makes you
-focus on the real challenges and let's you forget the insignificant
+focus on the real challenges and lets you forget the insignificant
 details.
 
 Not all abstractions are perfect. Some are leaky; some are just plain
@@ -335,7 +335,7 @@ courage to fix the actual problem**. Your choice might seem sensible now
 (easier to integrate with the old abstraction; less changes overall),
 but 5 months, 5 years or even 50 years from now, people are going to
 say: "Why do I have to care about this stuff? Why couldn't you just have
-fix the goddamn problem?"
+fixed the goddamn problem?"
 
 [datamapper]: http://martinfowler.com/eaaCatalog/dataMapper.html
 
