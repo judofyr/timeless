@@ -304,7 +304,7 @@ built on top:
 
 This is a horrible, hacky abstraction, implemented by some Ruby web servers
 (outside of the Rack specification). Not only does it *look* weird, it also
-breaks the the whole Rack abstraction. Any layer between the web server and the
+breaks the whole Rack abstraction. Any layer between the web server and the
 application (that follows the Rack specification) will behave incorrectly when
 it sees the dummy response.
 
