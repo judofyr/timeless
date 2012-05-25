@@ -110,14 +110,15 @@ Okay, so what's the real problem here?
 
 Controller tests are slow. Why?
 
-Because loading contollers are slow. Why?
+Because loading controllers are slow. Why?
 
-Because controllers are too complex.
+Because controllers are too complex; they depend on too many different
+parts of Rails which needs to be loaded at startup.
 
 Why are controllers complex? A controller is rather simple:
 
 * It takes a request and an empty response
-* It let's you define actions which changes the response
+* It lets you define actions which change the response
 * It defines some convenience methods
 
 These are the most important features. Let's write a very simple
@@ -186,11 +187,11 @@ what a controller is doing*. That doesn't mean they don't belong there,
 it just means you need to figure out if it's worth the added complexity.
 
 Does it belong another place? Maybe in the router (yes, there are
-frameworks that does the filtering in the router)? Somewhere else? I
-don't know. Maybe filters are lightweight and useful enough to take up
-some controller complexity.
+frameworks that do the filtering in the router)? Somewhere else? I don't
+know. Maybe filters are lightweight and useful enough to take up some
+controller complexity.
 
-And *this* is what we should focus on: Figuring out what belongs in te
+And *this* is what we should focus on: Figuring out what belongs in the
 most basic classes in our framework. Not creating a horrible patchwork
 by adding more abstractions.
 
@@ -199,7 +200,7 @@ by adding more abstractions.
 Just to make it clear: This is by no means an argument against Objectify
 itself, just the part where they introduce another layer on top of
 ActionController. The concept of service objects *does* make sense in
-more complex application, but I believe it's possible to achieve it
+more complex applications, but I believe it's possible to achieve it
 within the current abstractions exposed by Rails.
 
 ## Models
@@ -232,7 +233,7 @@ And there's *nothing* about data that makes it complex. Data is really,
 really simple. There's only two things you need to do with data:
 
 1. You need to be able to combine data into one structure
-2. You need to be able to take apart the data again
+2. You need to be able to take the data apart again
 
 If you're not able to do those things easily, you've already lost the
 war. When the data is difficult to work with, you're forced to add
@@ -267,7 +268,7 @@ it's too late. Or maybe the world changes in such way that it
 invalidates the abstraction.
 
 Rack is a typical example of an abstraction that hasn't handled change
-well. Rack is tries to abstract away HTTP in a simple and clear way.
+well. Rack tries to abstract away HTTP in a simple and clear way.
 When Rack was introduced in 2007, the web was pretty much stateless and
 every request expected an response as soon as possible. A synchronous
 interface makes sense:
@@ -279,9 +280,9 @@ interface makes sense:
 {: lang=ruby }
 
 The web has *changed*. Suddenly you have long-polling, where the request
-can wait for uptil 30 seconds before the server returns a response. We
-have WebSockets which completely breaks the stateless
-request/response-cycle. The requirements has changed.
+can wait for up to 30 seconds before the server returns a response. We
+have WebSocket which completely breaks the stateless
+request/response-cycle. The requirements have changed.
 
 Rack wasn't designed to handle these issues, so another abstraction was
 built on top:
@@ -303,7 +304,7 @@ built on top:
 
 This is a horrible, hacky abstraction, implemented by some Ruby web servers
 (outside of the Rack specification). Not only does it *look* weird, it also
-breaks the the whole Rack abstraction. Any layer between the web server and the
+breaks the whole Rack abstraction. Any layer between the web server and the
 application (that follows the Rack specification) will behave incorrectly when
 it sees the dummy response.
 
@@ -313,8 +314,8 @@ the future comes and ruins everything.
 ## Sustain the pain; go with the flow. Or: deal with the real problem.
 
 Sometimes you're stuck with crappy abstractions. ActiveRecord isn't
-perfect. ActionController has its problem. You *will* feel a slight pain
-when you're forced to use them in a way don't like. It's very tempting
+perfect. ActionController has its problems. You *will* feel a slight pain
+when you're forced to use them in a way you don't like. It's very tempting
 to just add another abstraction. It can't harm, right?
 
 Personally, I try to *avoid* these abstractions-of-abstractions
