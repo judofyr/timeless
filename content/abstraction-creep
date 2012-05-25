@@ -200,7 +200,7 @@ by adding more abstractions.
 Just to make it clear: This is by no means an argument against Objectify
 itself, just the part where they introduce another layer on top of
 ActionController. The concept of service objects *does* make sense in
-more complex application, but I believe it's possible to achieve it
+more complex applications, but I believe it's possible to achieve it
 within the current abstractions exposed by Rails.
 
 ## Models
