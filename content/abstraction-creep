@@ -314,8 +314,8 @@ the future comes and ruins everything.
 ## Sustain the pain; go with the flow. Or: deal with the real problem.
 
 Sometimes you're stuck with crappy abstractions. ActiveRecord isn't
-perfect. ActionController has its problem. You *will* feel a slight pain
-when you're forced to use them in a way don't like. It's very tempting
+perfect. ActionController has its problems. You *will* feel a slight pain
+when you're forced to use them in a way you don't like. It's very tempting
 to just add another abstraction. It can't harm, right?
 
 Personally, I try to *avoid* these abstractions-of-abstractions
