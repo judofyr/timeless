@@ -1,0 +1,341 @@
+Title: Abstraction Creep
+Subtitle: 
+Author: judofyr
+
+Abstractions are very powerful when you're writing software. You don't
+want to write your web applications in assembly, or an operating system
+in JavaScript for that matter. Choosing the right abstraction makes you
+focus on the real challenges and let's you forget the insignificant
+details.
+
+Not all abstractions are perfect. Some are leaky; some are just plain
+stupid. But wait! We can just introduce an abstraction on top of that,
+right? Let's hide the stupid details and provide a new, better
+abstraction!
+
+*Abstraction creep* is what happens when you try to save yourself from a
+shaky abstraction by introducing *another* abstraction, instead of just
+fixing that goddamn abstraction.
+
+(snip)
+
+I'm going to use examples from Ruby and Ruby on Rails, but I think the
+examples are clear enough for any programmer to understand. Please
+[contact](/comments) me if something is unclear.
+
+## Controller tests
+
+Controller tests in Rails are slow. Or, more correctly: Starting the
+environment where you can run controller tests in Rails takes time.
+We're talking 5-10 seconds here. 10 seconds doesn't sound so bad, but
+when you're trying to quickly iterate over test/code, waiting 10 seconds
+before getting any feedback kills your flow. 
+
+Well, luckily we can introduce another abstraction!
+
+### The old code
+
+    class PicturesController < ApplicationController
+      before_filter :required_login
+      
+      def create
+        @picture = current_user.pictures.create(params[:picture])
+        if @picture.persisted?
+          redirect_to @picture
+        else
+          render :action => :edit
+        end
+      end
+    end
+{: lang=ruby }
+
+### Let's Objectify!
+
+Let's use [Objectify](https://github.com/bitlove/objectify) to make this
+controller more testable.
+
+First, we separate out the filter:
+
+    class RequiresLoginPolicy
+      def allowed?(current_user) 
+        !current_user.nil?
+      end
+    end
+{: lang=ruby }
+
+Then, the actual action:
+
+    class PicturesCreateService
+      def call(current_user, params)
+        current_user.pictures.create params[:picture]
+      end
+    end
+{: lang=ruby }
+
+And finally, the rendering:
+
+    class PicturesCreateResponder
+      def call(service_result, controller, renderer)
+        if service_result.persisted?
+          renderer.redirect_to service_result
+        else
+          renderer.data(service_result)
+          renderer.render :action => :edit
+        end
+      end
+    end
+{: lang=ruby }
+
+Now we can test each of these three classes without loading Rails. Woah,
+super fast tests! They're even *unit* tests; only testing a single step
+of the flow, so your tests become simpler too.
+
+Win/win, right?
+
+### Let's take a step back
+
+What have we actually done here?
+
+We've created our own abstraction on top of Rails'
+request/response-loop. Is it useful? Yes, we can now focus on smaller
+units. Does it have some problems? Yes, you can't easily test the way
+the units actually work in production. Is it more complex? Hell, yes. We
+have more classes, more methods, more `end`s, more lines of code.
+
+Is it worth it? I doubt it.
+
+### Fixing the goddamn abstraction
+
+Okay, so what's the real problem here?
+
+Controller tests are slow. Why?
+
+Because loading contollers are slow. Why?
+
+Because controllers are too complex.
+
+Why are controllers complex? A controller is rather simple:
+
+* It takes a request and an empty response
+* It let's you define actions which changes the response
+* It defines some convenience methods
+
+These are the most important features. Let's write a very simple
+controller:
+
+    class BasicController
+      def initialize(request, responder)
+        @request = request
+        @responder = response
+      end
+
+      def params
+        @request.params
+      end
+
+      def render(*args)
+        @responder.render(*args)
+      end
+
+      def redirect_to(*args)
+        @responder.redirect_to(*args)
+      end
+      
+      # and so on...
+    end
+
+    # Our previous code:
+    class PicturesController < BasicController
+      def current_user; ... end
+
+      def create
+        @picture = current_user.pictures.create(params[:picture])
+        if @picture.persisted?
+          redirect_to @picture
+        else
+          render :action => :edit
+        end
+      end
+    end
+{: lang=ruby }
+
+No dependencies (i.e. no other files/classes to load), no magic. Super
+fast tests again:
+
+    test "uploading a new picture" do
+      request = Request.new(:params => { :picture => { ... } })
+      responder = MockResponder.new
+      
+      picture = PicturesController.new(request, responder)
+      picture.create
+
+      assert response.redirected_to /^/pictures/(\d+)/
+      # or whatever we want to assert for
+    end
+{: lang=ruby }
+
+Notice that I'm using the regular Request class. Creating Request
+objects should be just as easy as creating a new controller object. They
+are both very simple classes that have few dependencies.
+
+### What about filters?
+
+You might have noticed that I silently dropped the before_filter in the
+last example. This was intentional because *filters are not crucial to
+what a controller is doing*. That doesn't mean they don't belong there,
+it just means you need to figure out if it's worth the added complexity.
+
+Does it belong another place? Maybe in the router (yes, there are
+frameworks that does the filtering in the router)? Somewhere else? I
+don't know. Maybe filters are lightweight and useful enough to take up
+some controller complexity.
+
+And *this* is what we should focus on: Figuring out what belongs in te
+most basic classes in our framework. Not creating a horrible patchwork
+by adding more abstractions.
+
+### Disclaimer
+
+Just to make it clear: This is by no means an argument against Objectify
+itself, just the part where they introduce another layer on top of
+ActionController. The concept of service objects *does* make sense in
+more complex application, but I believe it's possible to achieve it
+within the current abstractions exposed by Rails.
+
+## Models
+
+Models in Rails have the same problem as controllers: They are too
+complex. Too many dependencies.
+
+    class Post < ActiveRecord::Base
+    end
+{: lang=ruby }
+
+It looks so simple, but in reality it's a complicated beast:
+
+* You need a database connection to just instantiate it (!)
+* The table "posts" needs to exists in the database
+* It adds a bunch of methods
+
+Models in Rails works great as long as you're using them inside Rails'
+request/response-loop where everything is set up for you. The moment you
+step out from that loop (tests, other libraries) it's a big hassle.
+
+It's very tempting to add abstractions on top of ActiveRecord to make it
+easier to work with. Or you could fix the goddamn abstraction by using
+the [Data Mapper][datamapper] pattern instead.
+
+## Strive for simple data objects
+
+Abstraction creep often occurs when the data objects are too complex.
+And there's *nothing* about data that makes it complex. Data is really,
+really simple. There's only two things you need to do with data:
+
+1. You need to be able to combine data into one structure
+2. You need to be able to take apart the data again
+
+If you're not able to do those things easily, you've already lost the
+war. When the data is difficult to work with, you're forced to add
+abstractions, dependency-injection, mocks, stubs, and whatnot. Instead
+of just working with the actual data, you'll have to abstract away the
+data.
+
+Please be aware that this is by no means "incompatible" with
+object-oriented programming. You can still get your precious information
+hiding. You can still override accessors so the interface you expose
+isn't the same as the internal interface. You can still subclass your
+data objects. You can still add convenience methods for working with the
+data.
+
+You just have to make it effortless to do the two most important things:
+
+1. Construct the data object
+2. Access the data it's composed of
+
+As long as you can do this (hopefully with no dependencies at all),
+you can actually use your data objects in other classes. In fact, it
+*encourages you* to create separate classes for separate problems. When
+you can easily use your data objects it's even easier to separate
+functionality to other classes (as opposed to adding more functionality
+to the same class).
+
+## Sometimes change is imminent
+
+Of course, using complex data objects is far from the only way to create
+shaky abstractions. Sometimes we don't even realize it's flawed until
+it's too late. Or maybe the world changes in such way that it
+invalidates the abstraction.
+
+Rack is a typical example of an abstraction that hasn't handled change
+well. Rack is tries to abstract away HTTP in a simple and clear way.
+When Rack was introduced in 2007, the web was pretty much stateless and
+every request expected an response as soon as possible. A synchronous
+interface makes sense:
+
+    # When the web server sees a request it runs this:
+    env = build_env_from_request
+    status, headers, body = App.call(env)
+    server_response(status, headers, body)
+{: lang=ruby }
+
+The web has *changed*. Suddenly you have long-polling, where the request
+can wait for uptil 30 seconds before the server returns a response. We
+have WebSockets which completely breaks the stateless
+request/response-cycle. The requirements has changed.
+
+Rack wasn't designed to handle these issues, so another abstraction was
+built on top:
+
+    def App.call(env)
+      cb = env['async.callback']
+
+      # Async call
+      wait_for_long_polling do
+        # Now we can return the request!
+        cb.call(200, {}, [])
+      end
+
+      # Send a dummy "response" in order to be "complient" with the Rack
+      # abstraction.
+      [-1, {}, []]
+    end
+{: lang=ruby }
+
+This is a horrible, hacky abstraction, implemented by some Ruby web servers
+(outside of the Rack specification). Not only does it *look* weird, it also
+breaks the the whole Rack abstraction. Any layer between the web server and the
+application (that follows the Rack specification) will behave incorrectly when
+it sees the dummy response.
+
+You can't predict the future, and some abstractions are perfect until
+the future comes and ruins everything.
+
+## Sustain the pain; go with the flow. Or: deal with the real problem.
+
+Sometimes you're stuck with crappy abstractions. ActiveRecord isn't
+perfect. ActionController has its problem. You *will* feel a slight pain
+when you're forced to use them in a way don't like. It's very tempting
+to just add another abstraction. It can't harm, right?
+
+Personally, I try to *avoid* these abstractions-of-abstractions
+for as long as possible. I find that the complexity introduced is hardly
+worth the advantages. I can accept some slow tests. I can work around
+annoyances. All in the name of simplicity, consistency and familiarity.
+
+Maybe you'll reach a point of anger. You can no longer handle the pain.
+Or maybe the abstraction is just impossible to work around (you can't do
+long-polling efficiently in Rack without changing anything). If that
+happens, you might be better served to **rewrite the current (shaky)
+abstraction, instead of building another layer in an already-unstable
+foundation**.
+
+When you decide to abstract away the abstraction, it means you have the
+**competence to realize that the abstraction is wrong, but not the
+courage to fix the actual problem**. Your choice might seem sensible now
+(easier to integrate with the old abstraction; less changes overall),
+but 5 months, 5 years or even 50 years from now, people are going to
+say: "Why do I have to care about this stuff? Why couldn't you just have
+fix the goddamn problem?"
+
+[datamapper]: http://martinfowler.com/eaaCatalog/dataMapper.html
+
