@@ -104,7 +104,7 @@ have more classes, more methods, more `end`s, more lines of code.
 
 Is it worth it? I doubt it.
 
-### Fixing the goddamn abstraction
+### Fixing the abstraction
 
 Okay, so what's the real problem here?
 
@@ -222,8 +222,8 @@ request/response-loop where everything is set up for you. The moment you
 step out from that loop (tests, other libraries) it's a big hassle.
 
 It's very tempting to add abstractions on top of ActiveRecord to make it
-easier to work with. Or you could fix the goddamn abstraction by using
-the [Data Mapper][datamapper] pattern instead.
+easier to work with. Or you could fix the abstraction by using the [Data
+Mapper][datamapper] pattern instead.
 
 ## Strive for simple data objects
 
