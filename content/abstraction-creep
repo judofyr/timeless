@@ -118,7 +118,7 @@ parts of Rails which needs to be loaded at startup.
 Why are controllers complex? A controller is rather simple:
 
 * It takes a request and an empty response
-* It lets you define actions which changes the response
+* It lets you define actions which change the response
 * It defines some convenience methods
 
 These are the most important features. Let's write a very simple
@@ -191,7 +191,7 @@ frameworks that do the filtering in the router)? Somewhere else? I don't
 know. Maybe filters are lightweight and useful enough to take up some
 controller complexity.
 
-And *this* is what we should focus on: Figuring out what belongs in te
+And *this* is what we should focus on: Figuring out what belongs in the
 most basic classes in our framework. Not creating a horrible patchwork
 by adding more abstractions.
 
