@@ -24,22 +24,22 @@
       ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
-    
+
 
 %body(class=main_class)
   %header(class="main")
     %h1
       %a{:href => R(Index)}
         The <strong>timeless</strong> repository
-  
+
   %article
     != yield
-    
+
     %footer
       %p
-        2011
+        = Time.now.year
         —
         All content is licensed under <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>
         —
         %a{:href => R(Entry, 'comments')} Leave a comment
-      
+
