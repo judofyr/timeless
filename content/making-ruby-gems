@@ -4,7 +4,7 @@ Author: steveklabnik
 
 One of my favorite aspects of the Ruby community is its strong commitment to Open Source. Thousands of Rubyists have written great libraries and placed the code up on GitHub (or elsewhere on the Internet) for everyone to use. Ruby has a fantastic tool to distribute these libraries: RubyGems. One of the reasons that Open Source runs so strong through Ruby's veins is how easy it is to share your code.
 
-While making a gem is really easy, there are a few additional concens that you should be aware of when you distribute your code as a gem. Here's an example of building a simple Gem, with some notes on best practices along the way.
+While making a gem is really easy, there are a few additional concerns that you should be aware of when you distribute your code as a gem. Here's an example of building a simple Gem, with some notes on best practices along the way.
 
 (snip)
 
