@@ -135,6 +135,19 @@ but I'm not very picky when it comes to awesome code):
     end
 {: lang=ruby }
 
+[Jacques Fuentes][jac] has a beautiful letter to his daugther:
+
+    require "./love"
+
+    a_letter to: Augusta do
+      twas(only: 16.months.ago) { The::Universe << You.to(OurFamily) }
+      life.has :been => %w(i n c r e d i b l y).zip(*"wonderful!").ever_since
+      We::Wish.we_could { experience these_moments: over & over }
+      You.will always_be: Loved, and: Cherished
+      until Infinity.ends do; Forever.(); end
+    end
+{: lang=ruby }
+
 Please [let me know](/comments) if you have another one I can add.
 
 [haiku]: http://redhanded.hobix.com/bits/haikuRb.html 
@@ -142,3 +155,5 @@ Please [let me know](/comments) if you have another one I can add.
 [mm]: http://blog.evanweaver.com/articles/2007/05/23/keats-rb/
 [herval]: http://reddit.com/user/herval/
 [smackywentz]: http://reddit.com/user/smackywentz/
+[jac]: http://jpfuentes2.tumblr.com/post/39935683274/a-letter-to-my-daughter-augusta-in-ruby
+
