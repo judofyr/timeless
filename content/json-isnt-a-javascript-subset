@@ -79,7 +79,7 @@ Because of these two invisible Unicode characters, JSON is **not** a subset of
 JavaScript. Close, but no cigar.
 
 In most applications, you won't notice this issue. First of all, the line
-separator and the paragraph separator isn't exactly widely used. Secondly, any
+separator and the paragraph separator aren't exactly widely used. Secondly, any
 *proper* JSON parser will have no problems with parsing it.
 
 However, when you're dealing with [JSONP][jsonp] there's no way around: You're
