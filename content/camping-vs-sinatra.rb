@@ -181,8 +181,8 @@ reasons.push(RELOADING) do %%
 %%%%% end
                                                                         ''
                                                                         ''
-BEGIN {def Object.const_missing(m);m.to_s end;def method_missing(*a)a[1]=
-$h.pop if a[1]==$h;$h.push(a) end;$h = [];def reasons; $reas ||= {};end;''
+BEGIN{def Object.const_missing(m);m.to_s end;def self.method_missing(*a)''
+a[1]= $h.pop if a[1]==$h;$h.push(a) end;$h=[];def reasons;$r ||= {};end;''
 def reasons.push(r,&b);self[r]=b.call;end;END {puts h=$h*' ','='*h.size,''
 reasons.each { |name, val| puts name, '-'*name.size, val.gsub(/^  /,''),''
                                                                         ''
