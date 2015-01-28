@@ -1,11 +1,10 @@
-require 'uv'
+require 'rouge'
 require 'maruku'
 
 module MaRuKu::Out::HTML
   def to_html_code; 
   	source = self.raw_code
   	lang = self.attributes[:lang] || @doc.attributes[:code_lang] 
-  	lang = 'xml' if lang=='html'
 
   	use_syntax = get_setting :html_use_syntax
 	
@@ -15,18 +14,13 @@ module MaRuKu::Out::HTML
   			# eliminate trailing newlines otherwise Syntax crashes
   			source = source.gsub(/\n*\Z/,'')
 			
-  			html = Uv.parse(source, "xhtml", lang, false, "idle")
+        html = Rouge.highlight(source, lang, 'html')
   			html = html.gsub(/\&apos;/,'&#39;') # IE bug
   			html = html.gsub(/'/,'&#39;') # IE bug
 			
-  			code = Document.new(html, {:respect_whitespace =>:all}).root
-  			code.name = 'code'
-  			code.attributes['class'] = lang
-  			code.attributes['lang'] = lang
-			
-  			pre = Element.new 'pre'
-  			pre << code
-  			pre
+  			div = HTMLElement.new 'div'
+  			div << html
+  			div
   		rescue Object => e
   			maruku_error"Error while using the syntax library for code:\n#{source.inspect}"+
   			 "Lang is #{lang} object is: \n"+

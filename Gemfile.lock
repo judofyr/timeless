@@ -4,19 +4,11 @@ GEM
     camping (2.1)
       rack (>= 1.0)
     haml (3.0.21)
-    maruku (0.6.0)
-      syntax (>= 1.0.0)
+    maruku (0.7.2)
     newrelic_rpm (2.13.3)
-    oniguruma (1.1.0)
-    plist (3.1.0)
     rack (1.2.1)
-    syntax (1.0.0)
-    textpow (0.10.1)
-      oniguruma (>= 1.1.0)
-      plist (>= 3.0.0)
+    rouge (1.7.7)
     tilt (1.1)
-    ultraviolet (0.10.2)
-      textpow (>= 0.10.0)
 
 PLATFORMS
   ruby
@@ -26,5 +18,5 @@ DEPENDENCIES
   haml
   maruku
   newrelic_rpm
+  rouge
   tilt
-  ultraviolet

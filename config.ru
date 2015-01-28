@@ -1,3 +1,4 @@
+$LOAD_PATH << File.expand_path('..', __FILE__)
 require 'timeless'
 
 class RedirectToProperDomain
@@ -21,9 +22,6 @@ end
 
 if ENV['RACK_ENV'] == "production"
   use RedirectToProperDomain, 'timelessrepo.com'
-else
-  require 'new_relic/rack/developer_mode'
-  use NewRelic::Rack::DeveloperMode
 end
 
 public = Rack::File.new('public')

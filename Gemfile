@@ -9,7 +9,7 @@ gem "haml"
 
 # Maruku for content
 gem "maruku"
-gem "ultraviolet"
+gem "rouge"
 
 # New Relic
 gem "newrelic_rpm"

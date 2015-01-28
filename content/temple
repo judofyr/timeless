@@ -28,7 +28,7 @@ compile it to pure Ruby:
     <% if @me.happy? %>
       <%= @greeting %>
     <% end %>
-{: lang=html_rails }
+{: lang=erb }
 
 Becomes:
 

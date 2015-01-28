@@ -26,7 +26,7 @@ This shows the regular usage of block helpers in Rails 2.3:
     <% box do %>
       <p>Hello World!</p>
     <% end %>
-{: lang=html_rails }
+{: lang=erb }
 
 It's what we're used to and it probably seems completely fine to most of
 us, but when you think about it, it's not really consistent. Both the
@@ -61,7 +61,7 @@ Here's the same example in Rails 3:
     <%= box do %>
       <p>Hello World!</p>
     <% end %>
-{: lang=html_rails }
+{: lang=erb }
 
 Notice how it's consistent with ERB. Both form_for and f.text_field
 output HTML, and both of them uses ERB's output syntax. Therefore, the
@@ -123,7 +123,7 @@ Given this code:
     <% box do %>
       <p>Hello World!</p>
     <% end %>
-{: lang=html_rails }
+{: lang=erb }
 
 ERB generates this code:
 
@@ -178,7 +178,7 @@ One big, fragile hack which breaks easily:
       Written by: <%= m[:author] %>
       <%= a.content %>
     <% end %>
-{: lang=html_rails }
+{: lang=erb }
 
 ## Conclusion
 
