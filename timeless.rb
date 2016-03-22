@@ -8,12 +8,12 @@ require 'camping'
 require 'tilt'
 require 'haml'
 require 'maruku'
-require 'maruku-rouge'
+require_relative 'maruku-rouge'
 
 Camping.goes :Timeless
 
-require 'timeless/models/entry'
-require 'timeless/models/change'
+require_relative 'timeless/models/entry'
+require_relative 'timeless/models/change'
 
 class NotFound < StandardError; end
 
