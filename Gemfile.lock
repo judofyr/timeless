@@ -1,12 +1,13 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    camping (2.1)
+    camping (2.1.532)
+      mab (>= 0.0.3)
       rack (>= 1.0)
     haml (3.0.21)
+    mab (0.0.3)
     maruku (0.7.2)
-    newrelic_rpm (2.13.3)
-    rack (1.2.1)
+    rack (1.6.4)
     rouge (1.7.7)
     tilt (1.1)
 
@@ -17,6 +18,8 @@ DEPENDENCIES
   camping
   haml
   maruku
-  newrelic_rpm
   rouge
   tilt
+
+BUNDLED WITH
+   1.10.6

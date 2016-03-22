@@ -11,6 +11,3 @@ gem "haml"
 gem "maruku"
 gem "rouge"
 
-# New Relic
-gem "newrelic_rpm"
-
