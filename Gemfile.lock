@@ -1,25 +1,30 @@
+GIT
+  remote: git://github.com/judofyr/tubby.git
+  revision: e3848d09ad75399b7cea5eb1718ab4d5ed5327d5
+  specs:
+    tubby (1.master)
+
 GEM
   remote: http://rubygems.org/
   specs:
-    camping (2.1.532)
-      mab (>= 0.0.3)
-      rack (>= 1.0)
-    haml (3.0.21)
-    mab (0.0.3)
     maruku (0.7.2)
-    rack (1.6.4)
+    puma (3.12.0)
+    rack (2.0.5)
+    roda (3.11.0)
+      rack
     rouge (1.7.7)
-    tilt (1.1)
+    tilt (2.0.9)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  camping
-  haml
   maruku
+  puma
+  roda
   rouge
   tilt
+  tubby!
 
 BUNDLED WITH
-   1.10.6
+   1.16.2

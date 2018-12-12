@@ -1,13 +1,15 @@
 source "http://rubygems.org/"
 
 # Framework
-gem "camping"
+gem "roda"
 
-# Template engine
+gem "puma"
+
 gem "tilt"
-gem "haml"
 
 # Maruku for content
 gem "maruku"
 gem "rouge"
+
+gem "tubby", github: 'judofyr/tubby'
 

@@ -11,7 +11,7 @@ Masyu is a type of logic puzzle designed by the same guys behind Sudoku.
 Needless to say, it's very fun and extremely addicting. Especially when you
 play it on your iPoid, thanks to TootSweet:
 
-![TootSweet Masyu](http://img.skitch.com/20081213-r65y5bnwf9jkxt96cpbtwcxjcj.png)
+![TootSweet Masyu](http://timeless.judofyr.net/masyu/app.png)
 
 As as programmer, I didn't like the thought of all those beautiful, hand-made
 puzzles should be stuck on the iPod, so I wanted to see how TootSweet stored
@@ -23,7 +23,7 @@ I've already jailbroken my iPod, so after SSH-ing in, a simple `find
 /User/Applications/ -wholename *MasyuBug.app` revealed where the files to
 MasyuBug.app were stored:
 
-![MasyuBug.app](http://img.skitch.com/20081213-cups8uy4t6psuujd7qydmynddt.png)
+![MasyuBug.app](http://timeless.judofyr.net/masyu/terminal.png)
 
 And right there, in a SQLite-file called `Documents/Puzzles.data` I found the
 puzzles. Just seconds later I got the schema:
@@ -74,7 +74,7 @@ the letters and once again noticed how MasyuApp displayed the puzzle:
 Obviously, each letter represented three squares, but exactly how? After 52
 UPDATE’s I ended up with this table:
 
-![Puzzle table](http://img.skitch.com/20081213-mtfekqwn3ypegkuufqeyxh6j7d.png)
+![Puzzle table](http://timeless.judofyr.net/masyu/table.png)
 
 Can you spot how TootSweet's converts letters to circles? It took me a while,
 but suddenly I realized it: it’s base-4. It's in fact reversed base-4 where 0
@@ -118,7 +118,7 @@ missing letters TootSweet used:
 base-2 is 110100. Reversed it's 001011 and it would look like this (if we
 assumed that the 0 was in the first letter):
 
-![Lines](http://img.skitch.com/20081213-m7sxgug2in8w1pigi17ubtbu2y.png)
+![Lines](http://timeless.judofyr.net/masyu/numbering.png)
 
 Ruby version:
 

@@ -1,7 +1,3 @@
-$LOAD_PATH << File.expand_path('..', __FILE__)
-Encoding.default_external = "utf-8"
-require 'timeless'
-
 class RedirectToProperDomain
   def initialize(app, domain)
     @app = app
@@ -26,6 +22,8 @@ if ENV['RACK_ENV'] == "production"
 end
 
 public = Rack::File.new('public')
-app    = Timeless
+
+require_relative 'app/web'
+app    = Web
 
 run Rack::Cascade.new([public, app])
