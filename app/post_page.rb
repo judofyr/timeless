@@ -33,6 +33,10 @@ class PostPage < Page
     @html ||= maruku.to_html
   end
 
+  def snip_html
+    @snip_html ||= Maruku.new(content(true)).to_html
+  end
+
   def title
     self[:title]
   end

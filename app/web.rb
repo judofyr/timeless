@@ -17,6 +17,7 @@ class Web < Roda
 
   opts[:root] = __dir__
   plugin :assets, css: 'style.css'
+  plugin :render
 
   def render_layout
     target = String.new
@@ -35,6 +36,20 @@ class Web < Roda
       @layout.big_header = true
       @layout.body = Index.new
       render_layout
+    end
+
+    r.is 'changelog.xml' do
+      @changes = T.changes
+      response['Content-Type'] = 'text/xml'
+      render(:feed)
+    end
+
+    r.is 'changelog', Integer do |id|
+      if change = T.changes.detect { |c| c.id == id }
+        @layout.title = change.title
+        @layout.body = change
+        render_layout
+      end
     end
 
     r.is String do |key|
