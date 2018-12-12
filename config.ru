@@ -1,3 +1,5 @@
+Encoding.default_external = "utf-8"
+
 class RedirectToProperDomain
   def initialize(app, domain)
     @app = app
