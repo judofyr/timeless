@@ -11,5 +11,5 @@ gem "tilt"
 gem "maruku"
 gem "rouge"
 
-gem "tubby", github: 'judofyr/tubby'
+gem "tubby"
 

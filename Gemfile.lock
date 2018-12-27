@@ -1,9 +1,3 @@
-GIT
-  remote: git://github.com/judofyr/tubby.git
-  revision: e3848d09ad75399b7cea5eb1718ab4d5ed5327d5
-  specs:
-    tubby (1.master)
-
 GEM
   remote: http://rubygems.org/
   specs:
@@ -14,6 +8,7 @@ GEM
       rack
     rouge (1.7.7)
     tilt (2.0.9)
+    tubby (1.0)
 
 PLATFORMS
   ruby
@@ -24,7 +19,7 @@ DEPENDENCIES
   roda
   rouge
   tilt
-  tubby!
+  tubby
 
 BUNDLED WITH
-   1.16.2
+   1.17.2
