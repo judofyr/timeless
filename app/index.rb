@@ -14,6 +14,7 @@ class Index
     page_section(
       "Programming pieces",
       [
+        "composing-templates-with-tubby",
         "abstraction-creep",
         "json-isnt-a-javascript-subset",
         "literate-programming",

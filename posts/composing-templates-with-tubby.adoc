@@ -1,0 +1,403 @@
+= Writing Composable Templates in Tubby
+Magnus Holm <judofyr@gmail.com>
+:toc:
+
+Recently I've been working on https://github.com/judofyr/tubby[Tubby], a library
+for writing HTML templates in plain Ruby:
+
+[source,ruby]
+----
+tmpl = Tubby.new { |t|
+  t.doctype!
+
+  t.h1("Hello #{current_user}!")
+
+  t << Avatar.new(current_user)
+
+  t.ul {
+    t.li("Tinky Winky")
+    t.li("Dipsy", class: "active")
+    t.li("Laa-Laa")
+    t.li("Po")
+  }
+}
+
+puts tmpl.to_s
+----
+
+This is hardly a new idea: https://github.com/markaby/markaby[Markaby] was
+released back in 2009, and since then we've also seen
+https://github.com/ahoward/tagz[Tagz],
+https://github.com/erector/erector[Erector], and
+https://github.com/camping/mab[Mab].
+Tubby might seem like nothing more than a more syntactically verbose, less
+feature-rich alternative, but there is in fact a very concrete philosophy which
+has lead to this design. The goal of Tubby is to provide a way to write
+*composable templates* where it gets out of your way so you can use Ruby's
+built-in features (classes and modules) yourself. This has lead to the following
+decisions:
+
+- You don't need to inherit from a class or include a module to use Tubby.
+- Tubby doesn't use `instance_eval` so you never need to worry about what `self` is.
+- Clear separation between your object and the renderer (the `t`-object above).
+- Any object can behave as a template by implementing `#to_tubby`.
+- Tiny API with very few features: Easy to learn and easy to read, at the cost
+  of sometimes being more verbose.
+
+If you haven't already, I recommend reading through the
+https://github.com/judofyr/tubby["Basic usage"-section] of the README to get a
+feel of the features of Tubby. The real power of Tubby comes in how you can use
+it with plain Ruby classes to build maintainable, composable templates. In this
+article I will describe various patterns I've discovered.
+
+== Composing templates
+
+Let us briefly recap (it's all in the README) how composition works. In Tubby
+you use `t << obj` to _append_ another template:
+
+[source,ruby]
+.A component which renders the avatar for a user.
+----
+class Avatar
+  def initialize(user)
+    @user = user
+  end
+
+  def url
+    @user.profile_picture_url
+  end
+
+  def to_tubby
+    Tubby.new { |t|
+      t.a(class: "avatar", href: "/users/#{@user.id}") {
+        t.img(src: url)
+      }
+    }
+  end
+end
+
+tmpl = Tubby.new { |t|
+  t.h2(post.title)
+
+  t.p {
+    t << Avatar.new(post.user)
+    t << "Written by #{post.user.name}"
+  }
+}
+----
+
+The object passed to `<<` must either be a string (or something which can be
+converted to a string), a template, or it must respond to `#to_tubby`. Exactly
+*how* the `#to_tubby` method is defined is up to you: You are free to define it
+in a superclass or in an included module if that makes more sense. A component
+doesn't even have to be an object; you can also define a regular method (in a
+module) which returns a template object directly:
+
+[source,ruby]
+.Using a module for UI components.
+----
+module Helpers
+  module_function
+
+  def btn(text, type: "primary")
+    Tubby.new { |t|
+      t.button(text, class: "btn btn-#{type}")
+    }
+  end
+
+  def box(title)
+    Tubby.new { |t|
+      t.div(class: "box") {
+        t.div(class: "box-header") {
+          t.h2(title)
+        }
+
+        t.div(class: "box-content") {
+          yield
+        }
+      }
+    }
+  end
+end
+
+tmpl = Tubby.new { |t|
+  t << Helpers.box("User") {
+    t.h2(user.name)
+
+    t.form(action: "/users/#{user.id}", method: "POST") {
+      t << Helpers.btn("Delete", type: "danger")
+    }
+  }
+}
+----
+
+== Different types of components
+
+Tubby is very flexible in the way you can create components, and after playing
+with it for some time I've discovered a few useful patterns.
+
+=== UI components
+
+A UI component should:
+
+- Be a class which takes keyword arguments in `#initialize`.
+- Only be concerned with presentation.
+- Only deal with core Ruby types (strings, arrays, and so on) and not be
+  dependent on model types (e.g. `User`).
+- Be possible to re-use across different application that shares the same UI.
+- Be the solution for having consistent UI in your application.
+
+[source,ruby]
+.A component for adding Save/Cancel-buttons.
+----
+class OkCancel
+  def initialize(cancel_link:)
+    @cancel_link = cancel_link
+  end
+
+  def to_tubby
+    Tubby.new { |t|
+      t.div(class: "btn-group") {
+        t.button("Save", class: "btn", type: "submit")
+        t.a("Cancel", class: "btn", href: @cancel_link)
+      }
+    }
+  end
+end
+
+tmpl = Tubby.new { |t|
+  t << OkCancel.new(cancel_link: "/users")
+}
+----
+
+UI components are easy to reason about (it's only about presenting data), easy
+to share (they shouldn't depend on any specific data types), and cuts down on
+duplicated boilerplate which leads to pages having inconsistent styling.
+
+=== Decorator components
+
+A decorator component should:
+
+- Be a class which takes a single object in `#initialize`.
+- Use an accessor for that object (and don't depend on instance variables).
+- Encapsulate presentation logic about that object.
+- Define methods for any non-trivial logic.
+- Use UI components for any non-trivial, shared UI.
+
+[source,ruby]
+.A component for showing a `Post`.
+----
+class PostView
+  attr_reader :post
+
+  def initialize(post)
+    @post = post
+  end
+
+  def publication_status
+    if post.published_at
+      post.published_at.strftime("%B %e, %Y")
+    else
+      "Draft"
+    end
+  end
+
+  def to_tubby
+    Tubby.new { |t|
+      t.h2(post.title)
+      t.p(post.author.name, class: "author-line")
+      t.p(publication_status, class: "status")
+    }
+  end
+end
+----
+
+A decorator component is a great place to have business logic around the
+presentation of models. Often you'll see that methods that you previously had in
+a model class more accurately belongs in the decorator component. This makes
+your models more focused on the _data_ and less concerned with the presentation.
+
+=== Layout components
+
+A layout component should:
+
+- Be a class which takes no arguments in `#initialize`.
+- Be initialized once very early in the request/response-cycle, and be mutated
+  during processing.
+- Have a `content` accessor for changing the main concent.
+- Have other accessors for changing other parts (`<title>`-tag,
+  meta-description, extra content).
+
+
+[source,ruby]
+.A basic `Layout` component with example usage.
+----
+class Layout
+  attr_accessor :content, :title, :extra_scripts
+
+  def initialize
+    @extra_scripts = []
+  end
+
+  def to_tubby
+    Tubby.new { |t|
+      t.doctype!
+      t.html {
+        t.head {
+          t.title(title) if title
+          extra_scripts.each do |script_text|
+            t.script(script_text)
+          end
+        }
+        t.body {
+          t.div(class: "header") {
+            t.h1("My application")
+          }
+          t.div(class: "content") {
+            t << content
+          }
+        }
+      }
+    }
+  end
+end
+
+# Example:
+
+class ApplicationController < ActionController::Base
+  before_action do
+    @layout = Layout.new
+  end
+end
+
+class UsersController < ApplicationController
+  def show
+    user = User.find(params[:id])
+    @layout.extra_scripts << "initSomething()"
+    @layout.title = user.name
+    @layout.content = UserPage.new(user)
+    render text: @layout.to_s
+  end
+end
+----
+
+This component type is maybe the most foreign-looking one if you're used to
+`yield`-based layout templates, but it turns out to be very effective in
+practice. Do you need a customizable `<meta name="description">`? Introduce a
+`attr_accessor :meta_description` and assign to it in the appropriate place. Do
+you need a breadcrumb menu? Define a `def push_breadcrumb(name, url)` and call
+it whenever you enter a new level. My favorite discovery is maybe the
+"customizable `body` "-component, where users of the layout can choose to inject
+itself into the content or take over the full `body`-tag:
+
+[source,ruby]
+.A basic `Layout` component with customizable `body`
+----
+class Layout
+  attr_accessor :content, :title
+  attr_writer :body
+
+  def body
+    @body ||= Tubby.new { |t|
+      t.div(class: "header") {
+        t.h1("My application")
+      }
+      t.div(class: "content") {
+        t << content
+      }
+    }
+  end
+
+  def to_tubby
+    Tubby.new { |t|
+      t.doctype!
+      t.html {
+        t.head {
+          t.title(title) if title
+          extra_scripts.each do |script_text|
+            t.script(script_text)
+          end
+        }
+        t.body {
+          t << body
+        }
+      }
+    }
+  end
+end
+
+# Regular pages:
+@layout.content = UserPage.new(user)
+
+# Pages which needs the full <body>:
+@layout.body = PDFPreviewPage.new(url)
+----
+
+You can use this same structure with inheritance where subclasses override the
+`body`-method to provide a different layout.
+
+=== Query components
+
+A query component should:
+
+- Be a class which takes an input in `#initialize`.
+- Have methods which fetches the data required based on the input.
+- Have a render method which presents the data.
+
+[source,ruby]
+----
+class CalendarQuery
+  def initialize(start_date, end_date)
+    @start_date = start_date
+    @end_date = end_date
+  end
+
+  def date_range
+    @date_range ||= @start_date .. @end_date
+  end
+
+  def events
+    @events ||= Event.where(date: date_range).to_a
+  end
+
+  def by_date
+    @by_date ||= events.group_by(&:date)
+  end
+
+  def to_tubby
+    Tubby.new { |t|
+      date_range.each do |date|
+        t.h2(date.strftime("%B %e, %Y"))
+
+        current_events = by_date[date]
+        if current_events
+          current_events.each do |event|
+            t << EventView.new(event)
+          end
+        else
+          t.p("No events", class: "calendar-empty")
+        end
+      end
+    }
+  end
+end
+----
+
+Once you start introducing query components you will see that you can move code
+away from both models and controllers. Many of the database queries (and
+processing/aggregation of the results) in your application are only needed in
+one specific place. By using query components you can move this logic _away_
+from your models and avoid model bloat. Only the methods that are truly used
+everywhere in your application belongs to be a part of the model class.
+
+Query components are also extremely easy to test: Just don't care about the
+`#to_tubby` method, and test the separate methods by themselves. Since the
+component doesn't inherit from a specific class you are completely in control of
+its dependencies and how to initialize it.
+
+== Summary
+
+In a typical Rails application we have layouts, templates, partials and view
+helpers which all are invoked in different ways. With Tubby we use a single
+abstraction (a template), and by combining it with Ruby's regular
+classes/modules we have a way to build maintainable, testable, composable code.
