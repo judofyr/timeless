@@ -1,6 +1,7 @@
 require 'pathname'
 require_relative 'post_page'
 require_relative 'file_page'
+require_relative 'adoc_page'
 require_relative 'change'
 
 class Timeless
@@ -28,7 +29,7 @@ class Timeless
   end
 
   def read_pages
-    read_md_posts + read_files
+    read_posts + read_files
   end
 
   def read_files
@@ -36,10 +37,20 @@ class Timeless
       .map { |path| FilePage.new(path) }
   end
 
-  def read_md_posts
+  def read_posts
     (@directory + 'posts').children
-      .select { |path| path.extname == ".md" }
-      .map { |path| PostPage.new(path) }
+      .map { |path| read_post(path) }
+  end
+
+  def read_post(path)
+    case path.extname.to_s
+    when ".md"
+      PostPage.new(path)
+    when ".adoc"
+      AdocPage.new(path)
+    else
+      raise "unknown ext: #{path.extname}"
+    end
   end
 
   def read_changes

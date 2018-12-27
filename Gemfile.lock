@@ -1,12 +1,20 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    asciidoctor (1.5.8)
+    asciidoctor-html5s (0.1.0)
+      asciidoctor (~> 1.5.5)
+      thread_safe (~> 0.3.4)
+    asciidoctor-rouge (0.4.0)
+      asciidoctor (>= 1.5.6, < 2.1)
+      rouge (>= 2.2, < 4)
     maruku (0.7.2)
     puma (3.12.0)
     rack (2.0.5)
     roda (3.11.0)
       rack
-    rouge (1.7.7)
+    rouge (3.3.0)
+    thread_safe (0.3.6)
     tilt (2.0.9)
     tubby (1.0)
 
@@ -14,6 +22,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  asciidoctor
+  asciidoctor-html5s
+  asciidoctor-rouge
   maruku
   puma
   roda
