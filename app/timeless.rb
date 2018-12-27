@@ -28,7 +28,7 @@ class Timeless
   end
 
   def read_pages
-    read_posts + read_files
+    read_md_posts + read_files
   end
 
   def read_files
@@ -36,8 +36,9 @@ class Timeless
       .map { |path| FilePage.new(path) }
   end
 
-  def read_posts
+  def read_md_posts
     (@directory + 'posts').children
+      .select { |path| path.extname == ".md" }
       .map { |path| PostPage.new(path) }
   end
 

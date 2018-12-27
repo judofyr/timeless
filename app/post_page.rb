@@ -23,6 +23,10 @@ class PostPage < Page
     }
   }
 
+  def key
+    @key ||= @path.basename(".md").to_s
+  end
+
   def [](key);  maruku.get_setting(key) end
 
   def maruku
