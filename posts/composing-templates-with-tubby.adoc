@@ -1,9 +1,13 @@
 = Writing Composable Templates in Tubby
 Magnus Holm <judofyr@gmail.com>
 :toc:
+:url-tubby: https://github.com/judofyr/tubby
+:url-markaby: https://github.com/markaby/markaby
+:url-tagz: https://github.com/ahoward/tagz
+:url-erector: https://github.com/erector/erector
+:url-mab: https://github.com/camping/mab
 
-Recently I've been working on https://github.com/judofyr/tubby[Tubby], a library
-for writing HTML templates in plain Ruby:
+Recently I've been working on {url-tubby}/tubby[Tubby], a library for writing HTML templates in plain Ruby:
 
 [source,ruby]
 ----
@@ -25,35 +29,25 @@ tmpl = Tubby.new { |t|
 puts tmpl.to_s
 ----
 
-This is hardly a new idea: https://github.com/markaby/markaby[Markaby] was
-released back in 2009, and since then we've also seen
-https://github.com/ahoward/tagz[Tagz],
-https://github.com/erector/erector[Erector], and
-https://github.com/camping/mab[Mab].
-Tubby might seem like nothing more than a more syntactically verbose, less
-feature-rich alternative, but there is in fact a very concrete philosophy which
-has lead to this design. The goal of Tubby is to provide a way to write
-*composable templates* where it gets out of your way so you can use Ruby's
-built-in features (classes and modules) yourself. This has lead to the following
-decisions:
+This is hardly a new idea: {url-markaby}[Markaby] was released back in 2009, and since then we've also seen {url-tagz}[Tagz], {url-erector}[Erector], and {url-mab}[Mab].
+Tubby might seem like nothing more than a more syntactically verbose, less feature-rich alternative, but there is in fact a very concrete philosophy which has lead to this design.
+The goal of Tubby is to provide a way to write *composable templates* where it gets out of your way so you can use Ruby's built-in features (classes and modules) yourself.
+This has lead to the following decisions:
 
 - You don't need to inherit from a class or include a module to use Tubby.
 - Tubby doesn't use `instance_eval` so you never need to worry about what `self` is.
 - Clear separation between your object and the renderer (the `t`-object above).
 - Any object can behave as a template by implementing `#to_tubby`.
-- Tiny API with very few features: Easy to learn and easy to read, at the cost
-  of sometimes being more verbose.
+- Tiny API with very few features: Easy to learn and easy to read, at the cost of sometimes being more verbose.
 
-If you haven't already, I recommend reading through the
-https://github.com/judofyr/tubby["Basic usage"-section] of the README to get a
-feel of the features of Tubby. The real power of Tubby comes in how you can use
-it with plain Ruby classes to build maintainable, composable templates. In this
-article I will describe various patterns I've discovered.
+If you haven't already, I recommend reading through the {url-tubby}["Basic usage"-section] of the README to get a feel of the features of Tubby.
+The real power of Tubby comes in how you can use it with plain Ruby classes to build maintainable, composable templates.
+In this article I will describe various patterns I've discovered.
 
 == Composing templates
 
-Let us briefly recap (it's all in the README) how composition works. In Tubby
-you use `t << obj` to _append_ another template:
+Let us briefly recap (it's all in the README) how composition works.
+In Tubby you use `t << obj` to _append_ another template:
 
 [source,ruby]
 .A component which renders the avatar for a user.
@@ -86,12 +80,10 @@ tmpl = Tubby.new { |t|
 }
 ----
 
-The object passed to `<<` must either be a string (or something which can be
-converted to a string), a template, or it must respond to `#to_tubby`. Exactly
-*how* the `#to_tubby` method is defined is up to you: You are free to define it
-in a superclass or in an included module if that makes more sense. A component
-doesn't even have to be an object; you can also define a regular method (in a
-module) which returns a template object directly:
+The object passed to `<<` must either be a string (or something which can be converted to a string), a template, or it must respond to `#to_tubby`.
+Exactly *how* the `#to_tubby` method is defined is up to you:
+You are free to define it in a superclass or in an included module if that makes more sense.
+A component doesn't even have to be an object; you can also define a regular method (in a module) which returns a template object directly:
 
 [source,ruby]
 .Using a module for UI components.
@@ -133,8 +125,7 @@ tmpl = Tubby.new { |t|
 
 == Different types of components
 
-Tubby is very flexible in the way you can create components, and after playing
-with it for some time I've discovered a few useful patterns.
+Tubby is very flexible in the way you can create components, and after playing with it for some time I've discovered a few useful patterns.
 
 === UI components
 
@@ -142,8 +133,7 @@ A UI component should:
 
 - Be a class which takes keyword arguments in `#initialize`.
 - Only be concerned with presentation.
-- Only deal with core Ruby types (strings, arrays, and so on) and not be
-  dependent on model types (e.g. `User`).
+- Only deal with core Ruby types (strings, arrays, and so on) and not be dependent on model types (e.g. `User`).
 - Be possible to re-use across different application that shares the same UI.
 - Be the solution for having consistent UI in your application.
 
@@ -170,9 +160,7 @@ tmpl = Tubby.new { |t|
 }
 ----
 
-UI components are easy to reason about (it's only about presenting data), easy
-to share (they shouldn't depend on any specific data types), and cuts down on
-duplicated boilerplate which leads to pages having inconsistent styling.
+UI components are easy to reason about (it's only about presenting data), easy to share (they shouldn't depend on any specific data types), and cuts down on duplicated boilerplate which leads to pages having inconsistent styling.
 
 === Decorator components
 
@@ -212,21 +200,18 @@ class PostView
 end
 ----
 
-A decorator component is a great place to have business logic around the
-presentation of models. Often you'll see that methods that you previously had in
-a model class more accurately belongs in the decorator component. This makes
-your models more focused on the _data_ and less concerned with the presentation.
+A decorator component is a great place to have business logic around the presentation of models.
+Often you'll see that methods that you previously had in a model class more accurately belongs in the decorator component.
+This makes your models more focused on the _data_ and less concerned with the presentation.
 
 === Layout components
 
 A layout component should:
 
 - Be a class which takes no arguments in `#initialize`.
-- Be initialized once very early in the request/response-cycle, and be mutated
-  during processing.
+- Be initialized once very early in the request/response-cycle, and be mutated during processing.
 - Have a `content` accessor for changing the main concent.
-- Have other accessors for changing other parts (`<title>`-tag,
-  meta-description, extra content).
+- Have other accessors for changing other parts (`<title>`-tag, meta-description, extra content).
 
 
 [source,ruby]
@@ -281,14 +266,12 @@ class UsersController < ApplicationController
 end
 ----
 
-This component type is maybe the most foreign-looking one if you're used to
-`yield`-based layout templates, but it turns out to be very effective in
-practice. Do you need a customizable `<meta name="description">`? Introduce a
-`attr_accessor :meta_description` and assign to it in the appropriate place. Do
-you need a breadcrumb menu? Define a `def push_breadcrumb(name, url)` and call
-it whenever you enter a new level. My favorite discovery is maybe the
-"customizable `body` "-component, where users of the layout can choose to inject
-itself into the content or take over the full `body`-tag:
+This component type is maybe the most foreign-looking one if you're used to `yield`-based layout templates, but it turns out to be very effective in practice.
+Do you need a customizable `<meta name="description">`?
+Introduce a `attr_accessor :meta_description` and assign to it in the appropriate place.
+Do you need a breadcrumb menu?
+Define a `def push_breadcrumb(name, url)` and call it whenever you enter a new level.
+My favorite discovery is maybe the "customizable `body` "-component, where users of the layout can choose to inject itself into the content or take over the full `body`-tag:
 
 [source,ruby]
 .A basic `Layout` component with customizable `body`
@@ -333,8 +316,7 @@ end
 @layout.body = PDFPreviewPage.new(url)
 ----
 
-You can use this same structure with inheritance where subclasses override the
-`body`-method to provide a different layout.
+You can use this same structure with inheritance where subclasses override the `body`-method to provide a different layout.
 
 === Query components
 
@@ -383,21 +365,16 @@ class CalendarQuery
 end
 ----
 
-Once you start introducing query components you will see that you can move code
-away from both models and controllers. Many of the database queries (and
-processing/aggregation of the results) in your application are only needed in
-one specific place. By using query components you can move this logic _away_
-from your models and avoid model bloat. Only the methods that are truly used
-everywhere in your application belongs to be a part of the model class.
+Once you start introducing query components you will see that you can move code away from both models and controllers.
+Many of the database queries (and processing/aggregation of the results) in your application are only needed in one specific place.
+By using query components you can move this logic _away_ from your models and avoid model bloat.
+Only the methods that are truly used everywhere in your application belongs to be a part of the model class.
 
-Query components are also extremely easy to test: Just don't care about the
-`#to_tubby` method, and test the separate methods by themselves. Since the
-component doesn't inherit from a specific class you are completely in control of
-its dependencies and how to initialize it.
+Query components are also extremely easy to test:
+Just don't care about the `#to_tubby` method, and test the separate methods by themselves.
+Since the component doesn't inherit from a specific class you are completely in control of its dependencies and how to initialize it.
 
 == Summary
 
-In a typical Rails application we have layouts, templates, partials and view
-helpers which all are invoked in different ways. With Tubby we use a single
-abstraction (a template), and by combining it with Ruby's regular
-classes/modules we have a way to build maintainable, testable, composable code.
+In a typical Rails application we have layouts, templates, partials and view helpers which all are invoked in different ways.
+With Tubby we use a single abstraction (a template), and by combining it with Ruby's regular classes/modules we have a way to build maintainable, testable, composable code.
