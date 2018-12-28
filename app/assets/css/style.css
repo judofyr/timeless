@@ -11,12 +11,17 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Helvetica Neue', Arial, sans-serif;
-
-}
-
-h1 {
   line-height: 1.2;
 }
+
+a {
+  color: #0000EE;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
 
 /** Header **/
 
@@ -44,6 +49,21 @@ h1 {
   padding: 20px 0;
 }
 
+.header h1 a {
+  color: #666;
+  text-decoration: none;
+}
+
+.header h1 a:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
+.header h1 strong {
+  color: #A40802;
+}
+
+
 /** Main container **/
 
 .main {
@@ -70,45 +90,27 @@ h1 {
   color: #333;
 }
 
-/** General styling **/
-
-h1 a {
-  color: #666;
-  text-decoration: none;
-}
-
-h1 a:hover {
-  color: #000;
-  text-decoration: underline;
-}
-
-h1 strong {
-  color: #A40802;
-}
-
-h1 {
+.post h1 {
   font-size: 36px;
-}
-
-p, ul, ol, pre, hr {
-  margin-bottom: 1em;
-}
-
-h2 {
-  margin-top: 1em;
-  margin-bottom: 0.5em;
 }
 
 .post h2 {
   border-bottom: 1px solid #9e9e9e;
-}
-
-h3 {
   margin-top: 1em;
   margin-bottom: 0.5em;
 }
 
-blockquote {
+.port h3 {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+
+.post p, .post ul, .post ol, .post pre, .post hr {
+  margin-bottom: 1em;
+}
+
+.post blockquote {
   color: #015406;
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
@@ -116,49 +118,40 @@ blockquote {
   padding: 1em 2em 0;
 }
 
-cite {
+.post cite {
   display: inline;
   font-style: italic;
   font-weight: bold;
 }
 
-cite a { color: #015406; }
+.post cite a { color: #015406; }
 
-pre, code {
+.post pre, .post code {
   line-height: 1.5;
   font-family: Monaco, monospace;
   font-size: 12px;
   padding: 0.5em;
 }
 
-code {
+.post code {
   background: #f5f5f5;
   padding: 0.2em;
 }
 
-hr {
+.post hr {
   border: 0;
   border-top: 1px dotted #222; 
   clear: both;
 }
 
-
-a {
-  color: #0000EE;
-}
-
-a:hover {
-  text-decoration: none;
-}
-
-.footnotes { font-size: 0.8em; line-height: 1.5 }
-.footnotes p { display: inline }
-
-/* ARTICLE */
-
-ol ol {
+.post ol ol {
   margin-left: 2em;
   margin-bottom: 0;
+}
+
+.post figcaption {
+  font-weight: bold;
+  font-size: 0.9rem;
 }
 
 #toc {
@@ -175,10 +168,8 @@ ol ol {
   list-style-position: inside;
 }
 
-figcaption {
-  font-weight: bold;
-  font-size: 0.9rem;
-}
+.footnotes { font-size: 0.8em; line-height: 1.5 }
+.footnotes p { display: inline }
 
 /* FOOTER */
 
@@ -201,16 +192,20 @@ figcaption {
   text-decoration: none;
 }
 
-.index {
-  columns: 2;
-}
-
 .front-section {
   margin-bottom: 3em;
 }
 
 .front-section h2 span {
   border-bottom: 3px solid;
+}
+
+.front-section h2 {
+   margin-bottom: 0.5em;
+}
+
+.front-section p {
+  margin-bottom: 1em;
 }
 
 .front-index li {
