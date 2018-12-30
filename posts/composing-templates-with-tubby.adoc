@@ -7,7 +7,7 @@ Magnus Holm <judofyr@gmail.com>
 :url-erector: https://github.com/erector/erector
 :url-mab: https://github.com/camping/mab
 
-Recently I've been working on {url-tubby}/tubby[Tubby], a library for writing HTML templates in plain Ruby:
+Recently I've been working on {url-tubby}[Tubby], a library for writing HTML templates in plain Ruby:
 
 [source,ruby]
 ----
