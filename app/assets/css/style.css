@@ -63,6 +63,27 @@ a:hover {
   color: #A40802;
 }
 
+/** Warning/notes **/
+
+.alert {
+  border-left: 5px solid #E0E0E0;
+  padding: 0.5em 1em;
+  margin-bottom: 2em;
+}
+
+.alert > *:last-child {
+  margin-bottom: 0;
+}
+
+.alert.error {
+  background: #FED7D7;
+  border-color: #E53E3E;
+}
+
+.alert.warning {
+  background: #FEFCBF;
+  border-color: #F6E05E;
+}
 
 /** Main container **/
 
