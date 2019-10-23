@@ -11,7 +11,7 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Helvetica Neue', Arial, sans-serif;
-  line-height: 1.2;
+  line-height: 1;
 }
 
 a {
@@ -82,8 +82,13 @@ a:hover {
   padding: 0 1em;
 }
 
+.post header {
+  margin-bottom: 0.5em;
+}
+
 .post header p {
   color: #333;
+  margin: 0.5em 0 2em;
 }
 
 .post header a {
@@ -96,12 +101,12 @@ a:hover {
 
 .post h2 {
   border-bottom: 1px solid #9e9e9e;
-  margin-top: 1em;
+  margin-top: 2em;
   margin-bottom: 0.5em;
 }
 
 .port h3 {
-  margin-top: 1em;
+  margin-top: 2em;
   margin-bottom: 0.5em;
 }
 
@@ -156,12 +161,17 @@ a:hover {
 
 #toc {
   border-left: 5px solid #E0E0E0;
-  padding-left: 1em;
-  margin-bottom: 1em;
+  padding: 0.5em 1em;
+  margin-bottom: 2em;
 }
 
 #toc h2 {
   font-size: 1rem;
+  margin: 0;
+}
+
+#toc > *:last-child {
+  margin-bottom: 0;
 }
 
 #toc ol {
