@@ -10,7 +10,7 @@ GEM
       rouge (>= 2.2, < 4)
     maruku (0.7.2)
     puma (3.12.0)
-    rack (2.0.5)
+    rack (2.2.3)
     roda (3.11.0)
       rack
     rouge (3.3.0)
